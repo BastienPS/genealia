@@ -6,8 +6,10 @@
 <div class="bg-brand-canvas py-12 px-6 min-h-screen">
     <div class="max-w-3xl mx-auto">
         <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
-            <div class="bg-brand-canvas-dark p-8 text-brand-on-dark text-center">
-                <h1 class="text-3xl font-medium tracking-tight mb-2">Votre Demande de Recherche</h1>
+            <div class="bg-brand-canvas-dark p-8 text-brand-on-dark text-center relative overflow-hidden">
+                <div class="absolute inset-x-0 top-0 h-1 bg-brand-gradient"></div>
+                <span class="eyebrow text-brand-on-dark/70">Étape 1</span>
+                <h1 class="text-3xl font-medium tracking-tight mt-3 mb-2">Votre Demande de Recherche</h1>
                 <p class="text-brand-on-dark/70 text-sm">Remplissez ce formulaire avec le plus de détails possible pour m'aider à orienter mes recherches.</p>
             </div>
 
@@ -40,9 +42,7 @@
                     </div>
 
                     <div class="mt-10 text-center">
-                        <button type="submit" class="bg-brand-primary text-brand-on-primary font-mono uppercase text-xs tracking-mono-wide py-4 px-10 rounded-sm transition duration-300 shadow-none text-sm">
-                            Envoyer ma demande
-                        </button>
+                        <button type="submit" class="btn-cta">Envoyer ma demande</button>
                     </div>
                 {{ form_end(requestForm) }}
             </div>

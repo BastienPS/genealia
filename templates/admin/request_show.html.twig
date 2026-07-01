@@ -15,9 +15,15 @@
 
         <div class="flex justify-between items-center mb-8">
             <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à la liste</a>
-            <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">
-                {{ request.status }}
-            </span>
+            <div class="flex items-center gap-6">
+                {% if app.user %}
+                    <span class="text-brand-body text-sm hidden sm:inline">Connecté en tant que <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
+                {% endif %}
+                <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">
+                    {{ request.status }}
+                </span>
+                <a href="{{ path('app_logout') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Déconnexion</a>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -100,9 +106,7 @@
                             {{ form_row(uploadForm.description, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                         </div>
                         <div class="text-right">
-                            <button type="submit" class="bg-brand-primary text-brand-on-primary font-mono uppercase text-[11px] tracking-mono-wide py-2 px-6 rounded-sm hover:bg-stone-800 transition">
-                                Ajouter le document
-                            </button>
+                            <button type="submit" class="btn-cta-sm">Ajouter le document</button>
                         </div>
                     {{ form_end(uploadForm) }}
                 </div>
@@ -146,7 +150,7 @@
                             <option value="completed" {% if request.status == 'completed' %}selected{% endif %}>Terminé</option>
                             <option value="cancelled" {% if request.status == 'cancelled' %}selected{% endif %}>Annulé</option>
                         </select>
-                        <button type="submit" class="w-full bg-brand-primary text-brand-on-primary py-2 rounded-sm font-mono uppercase text-[11px] tracking-mono-wide hover:bg-stone-800 transition">
+                        <button type="submit" class="w-full btn-dark">
                             Mettre à jour
                         </button>
                     </form>

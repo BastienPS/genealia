@@ -28,7 +28,13 @@ module.exports = {
         'tightest': '-0.03em',
         'tight': '-0.01em',
         'mono-wide': '0.04em',
-      }
+      },
+      backgroundImage: {
+        'brand-gradient': 'linear-gradient(90deg, #fc4c02 0%, #ef2cc1 50%, #bdbbff 100%)',
+      },
+      boxShadow: {
+        'brand-glow': '0 8px 30px rgba(239, 44, 193, 0.35)',
+      },
     },
   },
   plugins: [],

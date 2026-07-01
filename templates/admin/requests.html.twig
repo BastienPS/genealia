@@ -7,18 +7,24 @@
     <div class="max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Gestion des Demandes</h1>
-            <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour au site</a>
+            <div class="flex items-center gap-6">
+                {% if app.user %}
+                    <span class="text-brand-body text-sm">Connecté en tant que <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
+                {% endif %}
+                <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour au site</a>
+                <a href="{{ path('app_logout') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Déconnexion</a>
+            </div>
         </div>
 
         <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-brand-hairline text-brand-body uppercase text-[11px] font-mono tracking-mono-wide">
+                <thead class="bg-brand-hairline text-brand-body">
                     <tr class="border-b border-brand-hairline">
-                        <th class="px-6 py-4">Client</th>
-                        <th class="px-6 py-4">Ancêtre</th>
-                        <th class="px-6 py-4">Date</th>
-                        <th class="px-6 py-4">Statut</th>
-                        <th class="px-6 py-4 text-right">Actions</th>
+                        <th class="eyebrow px-6 py-4">Client</th>
+                        <th class="eyebrow px-6 py-4">Ancêtre</th>
+                        <th class="eyebrow px-6 py-4">Date</th>
+                        <th class="eyebrow px-6 py-4">Statut</th>
+                        <th class="eyebrow px-6 py-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-brand-hairline">
@@ -46,7 +52,7 @@
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <a href="{{ path('app_admin_request_show', {'id': request.id}) }}" class="text-brand-primary hover:underline text-sm font-medium">Détails</a>
+                                <a href="{{ path('app_admin_request_show', {'id': request.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Détails</a>
                             </td>
                         </tr>
                     {% else %}

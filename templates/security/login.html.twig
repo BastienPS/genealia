@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-20 px-6 min-h-[80vh] flex items-center justify-center">
+    <div class="w-full max-w-md">
+        <div class="text-center mb-10">
+            <span class="eyebrow">Espace Administrateur</span>
+            <h1 class="text-4xl font-medium tracking-tightest text-brand-ink mt-3">Connexion</h1>
+        </div>
+
+        <div class="bg-brand-canvas p-8 rounded-sm border border-brand-hairline">
+            {% if error %}
+                <div class="mb-6 p-3 rounded-sm border border-brand-orange/40 bg-brand-orange/5 text-sm text-brand-orange">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form action="{{ path('app_login') }}" method="POST" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="_username" class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Identifiant</label>
+                    <input type="text" id="_username" name="_username" value="{{ last_username }}" autocomplete="username" required autofocus
+                           class="w-full p-3 rounded-sm border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="_password" class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Mot de passe</label>
+                    <input type="password" id="_password" name="_password" autocomplete="current-password" required
+                           class="w-full p-3 rounded-sm border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div>
+                    <button type="submit" class="btn-cta w-full justify-center">Se connecter</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à l'accueil</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

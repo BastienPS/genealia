@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -23,6 +26,7 @@
         <header class="sticky top-0 z-50 bg-brand-canvas-dark text-brand-on-dark border-b border-brand-surface-dark-soft">
             <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-brand-gradient"></span>
                     <span class="text-2xl font-medium tracking-tightest">Généalia</span>
                 </div>
                 <div class="hidden md:flex items-center gap-8 text-brand-on-dark font-normal">
@@ -31,8 +35,8 @@
                     <a href="#" class="hover:opacity-80 transition duration-300 text-sm">À propos</a>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">Connexion</a>
-                    <a href="#" class="bg-brand-primary text-brand-on-primary px-4 py-2 rounded-sm font-mono uppercase text-xs tracking-mono-wide hover:bg-stone-800 transition duration-300">S'inscrire</a>
+                    <a href="{{ path('app_login') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Connexion</a>
+                    <a href="{{ path('app_request_new') }}" class="btn-cta-sm">Déposer une demande</a>
                 </div>
             </nav>
         </header>
@@ -41,31 +45,35 @@
             {% block body %}{% endblock %}
         </main>
 
-        <footer class="bg-brand-canvas text-brand-ink py-20 px-6 border-t border-brand-hairline">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+        <footer class="bg-brand-canvas text-brand-ink pt-20 px-6">
+            <div class="h-1 w-full bg-brand-gradient"></div>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mt-16">
                 <div class="col-span-1">
-                    <span class="text-xl font-medium tracking-tightest">Généalia</span>
+                    <div class="flex items-center gap-2">
+                        <span class="h-2.5 w-2.5 rounded-full bg-brand-gradient"></span>
+                        <span class="text-xl font-medium tracking-tightest">Généalia</span>
+                    </div>
                     <p class="text-brand-body text-sm mt-4 leading-relaxed">
                         L'expertise humaine au service de votre histoire familiale.
                     </p>
                 </div>
                 <div>
-                    <h4 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Service</h4>
+                    <h4 class="eyebrow mb-4">Service</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="{{ path('app_home') }}" class="hover:text-brand-primary transition">Accueil</a></li>
-                        <li><a href="#" class="hover:text-brand-primary transition">Toute la gamme</a></li>
-                        <li><a href="#" class="hover:text-brand-primary transition">Témoignages</a></li>
+                        <li><a href="#how-it-works" class="hover:text-brand-primary transition">Comment ça marche ?</a></li>
+                        <li><a href="{{ path('app_request_new') }}" class="hover:text-brand-primary transition">Déposer une demande</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Légal</h4>
+                    <h4 class="eyebrow mb-4">Légal</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="#" class="hover:text-brand-primary transition">Mentions légales</a></li>
                         <li><a href="#" class="hover:text-brand-primary transition">Confidentialité</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Contact</h4>
+                    <h4 class="eyebrow mb-4">Contact</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="#" class="hover:text-brand-primary transition">Email</a></li>
                         <li><a href="#" class="hover:text-brand-primary transition">LinkedIn</a></li>

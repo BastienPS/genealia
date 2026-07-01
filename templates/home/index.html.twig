@@ -3,68 +3,96 @@
 {% block title %}Généalia - Votre expert en recherches généalogiques{% endblock %}
 
 {% block body %}
-<div class="flex flex-col min-h-screen">
-    <!-- Hero Section -->
-    <section class="relative bg-brand-canvas-dark text-brand-on-dark py-24 px-6 text-center overflow-hidden">
-        <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/paper.png');"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-medium tracking-tightest mb-6">
-                Je vous aide à retrouver vos ancêtres
-            </h1>
-            <p class="text-xl text-brand-on-dark/80 mb-10 max-w-2xl mx-auto leading-relaxed font-normal">
-                Vous souhaitez explorer votre histoire familiale mais vous ne savez pas par où commencer ?
-                Je mets mon expertise et mon temps à votre service pour effectuer vos recherches en archives.
-            </p>
-            <div class="flex justify-center gap-4">
-                <a href="#how-it-works" class="bg-brand-primary text-brand-on-primary font-mono uppercase text-xs tracking-mono-wide py-4 px-8 rounded-sm transition duration-300 shadow-lg text-sm">
-                    Comment ça marche ?
-                </a>
-                <a href="{{ path('app_request_new') }}" class="bg-brand-mint text-brand-ink font-mono uppercase text-xs tracking-mono-wide py-4 px-8 rounded-sm transition duration-300 text-sm">
-                    Déposer une demande
-                </a>
+<div class="flex flex-col">
+    <!-- Hero -->
+    <section class="relative bg-brand-canvas-dark text-brand-on-dark overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-brand-orange opacity-30 blur-3xl mix-blend-screen"></div>
+            <div class="absolute top-1/3 -right-10 h-80 w-80 rounded-full bg-brand-magenta opacity-30 blur-3xl mix-blend-screen"></div>
+            <div class="absolute -bottom-24 right-1/4 h-72 w-72 rounded-full bg-brand-periwinkle opacity-30 blur-3xl mix-blend-screen"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 py-28 md:py-36 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="eyebrow text-brand-on-dark/70">Généalogie professionnelle</span>
+                <h1 class="mt-5 text-4xl md:text-6xl font-medium tracking-tightest leading-[1.05]">
+                    Retrouvez vos <span class="gradient-text">ancêtres</span>,<br>
+                    généalogie après généalogie.
+                </h1>
+                <p class="mt-6 text-lg text-brand-on-dark/80 max-w-xl leading-relaxed font-normal">
+                    Vous souhaitez explorer votre histoire familiale mais ne savez pas par où commencer ? Je mets mon expertise et mon temps à votre service pour effectuer vos recherches en archives.
+                </p>
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <a href="{{ path('app_request_new') }}" class="btn-cta">Déposer une demande</a>
+                    <a href="#how-it-works" class="btn-outline-dark">Comment ça marche ?</a>
+                </div>
+            </div>
+
+            <!-- Brand ribbon panel -->
+            <div class="relative hidden lg:block">
+                <div class="relative aspect-square rounded-sm border border-brand-surface-dark-soft overflow-hidden bg-brand-canvas-dark/40">
+                    <div class="absolute inset-0 bg-brand-gradient opacity-90"></div>
+                    <div class="absolute -top-10 -left-10 h-56 w-56 rounded-full bg-brand-magenta opacity-60 blur-2xl mix-blend-screen"></div>
+                    <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-brand-periwinkle opacity-60 blur-2xl mix-blend-screen"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                        <span class="font-mono uppercase text-xs tracking-mono-wide text-white/80">Archives · Registres · Actes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gradient ribbon strip -->
+        <div class="h-1 w-full bg-brand-gradient"></div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-20 px-6 bg-brand-canvas">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-brand-mint rounded-sm p-8">
+                <div class="text-5xl font-medium tracking-tightest text-brand-ink">250+</div>
+                <div class="eyebrow mt-3">Ancêtres retrouvés</div>
+            </div>
+            <div class="bg-brand-periwinkle rounded-sm p-8">
+                <div class="text-5xl font-medium tracking-tightest text-brand-ink">12 ans</div>
+                <div class="eyebrow mt-3">D'expérience en archives</div>
+            </div>
+            <div class="bg-brand-mint rounded-sm p-8">
+                <div class="text-5xl font-medium tracking-tightest text-brand-ink">8</div>
+                <div class="eyebrow mt-3">Archives départementales</div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-20 px-6 bg-brand-canvas">
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24 px-6 bg-brand-canvas">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Processus</h2>
-                <h3 class="text-3xl md:text-4xl font-medium tracking-tight text-brand-ink mb-4">Un accompagnement simple et efficace</h3>
-                <div class="h-1 w-20 bg-brand-primary mx-auto"></div>
+                <span class="eyebrow">Processus</span>
+                <h2 class="mt-4 text-3xl md:text-4xl font-medium tracking-tight text-brand-ink">Un accompagnement simple et efficace</h2>
+                <div class="rule-gradient mx-auto mt-6"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Step 1 -->
-                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
-                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-                        1
-                    </div>
-                    <h3 class="text-xl font-medium text-brand-ink mb-3">Déposez vos indices</h3>
-                    <p class="text-brand-body leading-relaxed">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:-translate-y-1 hover:shadow-brand-glow">
+                    <div class="h-14 w-14 rounded-full bg-brand-gradient text-white flex items-center justify-center text-xl font-medium">1</div>
+                    <h3 class="mt-6 text-xl font-medium text-brand-ink">Déposez vos indices</h3>
+                    <p class="mt-3 text-brand-body leading-relaxed">
                         Remplissez un formulaire simple avec les noms, dates et lieux que vous connaissez. Plus vous donnez d'indices, plus la recherche est précise.
                     </p>
                 </div>
 
-                <!-- Step 2 -->
-                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
-                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-                        2
-                    </div>
-                    <h3 class="text-xl font-medium text-brand-ink mb-3">Je mène l'enquête</h3>
-                    <p class="text-brand-body leading-relaxed">
+                <div class="group p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:-translate-y-1 hover:shadow-brand-glow">
+                    <div class="h-14 w-14 rounded-full bg-brand-gradient text-white flex items-center justify-center text-xl font-medium">2</div>
+                    <h3 class="mt-6 text-xl font-medium text-brand-ink">Je mène l'enquête</h3>
+                    <p class="mt-3 text-brand-body leading-relaxed">
                         Je parcours les archives départementales, les registres paroissiaux et les bases de données spécialisées pour retrouver vos ancêtres.
                     </p>
                 </div>
 
-                <!-- Step 3 -->
-                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
-                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-                        3
-                    </div>
-                    <h3 class="text-xl font-medium text-brand-ink mb-3">Récupérez vos documents</h3>
-                    <p class="text-brand-body leading-relaxed">
+                <div class="group p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:-translate-y-1 hover:shadow-brand-glow">
+                    <div class="h-14 w-14 rounded-full bg-brand-gradient text-white flex items-center justify-center text-xl font-medium">3</div>
+                    <h3 class="mt-6 text-xl font-medium text-brand-ink">Récupérez vos documents</h3>
+                    <p class="mt-3 text-brand-body leading-relaxed">
                         Une fois la recherche terminée, je dépose les actes et documents trouvés dans votre espace personnel sécurisé.
                     </p>
                 </div>
@@ -72,28 +100,35 @@
         </div>
     </section>
 
-    <!-- Value Proposition Section -->
-    <section class="py-20 px-6 bg-brand-canvas">
+    <!-- Value Proposition -->
+    <section class="py-24 px-6 bg-brand-canvas-dark text-brand-on-dark">
         <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
             <div class="md:w-1/2">
-                <img src="https://images.unsplash.com/photo-1581578731548-4978a4d091ep?q=80&w=800&auto=format&fit=crop" alt="Recherche en archives" class="rounded-sm shadow-2xl border border-brand-hairline">
+                <div class="relative aspect-square rounded-sm border border-brand-surface-dark-soft overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-gradient opacity-80"></div>
+                    <div class="absolute -top-8 -left-8 h-48 w-48 rounded-full bg-brand-magenta opacity-60 blur-2xl mix-blend-screen"></div>
+                    <div class="absolute -bottom-8 -right-8 h-56 w-56 rounded-full bg-brand-periwinkle opacity-60 blur-2xl mix-blend-screen"></div>
+                </div>
             </div>
             <div class="md:w-1/2">
-                <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Pourquoi me choisir ?</h2>
-                <h3 class="text-3xl font-medium tracking-tight text-brand-ink mb-6">L'expertise humaine au service de vos racines</h3>
-                <div class="space-y-4">
+                <span class="eyebrow text-brand-on-dark/70">Pourquoi me choisir ?</span>
+                <h2 class="mt-4 text-3xl md:text-4xl font-medium tracking-tight text-brand-on-dark">L'expertise humaine au service de vos racines</h2>
+                <div class="mt-8 space-y-5">
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-brand-on-primary text-xs font-bold">✓</div>
-                        <p class="text-brand-body"><strong class="text-brand-ink">Gain de temps</strong> : Inutile de passer des heures à déchiffrer des écritures anciennes.</p>
+                        <div class="flex-shrink-0 h-6 w-6 rounded-full bg-brand-gradient flex items-center justify-center text-white text-xs font-bold">✓</div>
+                        <p class="text-brand-on-dark/85"><strong class="text-brand-on-dark">Gain de temps</strong> — inutile de passer des heures à déchiffrer des écritures anciennes.</p>
                     </div>
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white text-xs font-bold">✓</div>
-                        <p class="text-brand-body"><strong class="text-brand-ink">Rigueur méthodologique</strong> : Utilisation des meilleures sources et vérification croisée des données.</p>
+                        <div class="flex-shrink-0 h-6 w-6 rounded-full bg-brand-gradient flex items-center justify-center text-white text-xs font-bold">✓</div>
+                        <p class="text-brand-on-dark/85"><strong class="text-brand-on-dark">Rigueur méthodologique</strong> — meilleures sources et vérification croisée des données.</p>
                     </div>
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white text-xs font-bold">✓</div>
-                        <p class="text-brand-body"><strong class="text-brand-ink">Livraison claire</strong> : Vous recevez des documents organisés et commentés.</p>
+                        <div class="flex-shrink-0 h-6 w-6 rounded-full bg-brand-gradient flex items-center justify-center text-white text-xs font-bold">✓</div>
+                        <p class="text-brand-on-dark/85"><strong class="text-brand-on-dark">Livraison claire</strong> — documents organisés et commentés, dans votre espace personnel.</p>
                     </div>
+                </div>
+                <div class="mt-10">
+                    <a href="{{ path('app_request_new') }}" class="btn-cta">Déposer une demande</a>
                 </div>
             </div>
         </div>

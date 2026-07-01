@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Section over-title — uppercase mono eyebrow */
+  .eyebrow {
+    @apply font-mono uppercase text-xs tracking-mono-wide text-brand-body;
+  }
+
+  /* Primary CTA — brand gradient fill, big, glowing hover */
+  .btn-cta {
+    @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
+           px-10 py-4 rounded-sm text-white bg-brand-gradient
+           transition duration-300 hover:-translate-y-0.5 hover:shadow-brand-glow
+           focus:outline-none focus:ring-2 focus:ring-brand-magenta/40;
+  }
+
+  /* Compact variant for nav bars */
+  .btn-cta-sm {
+    @apply inline-flex items-center justify-center font-mono uppercase text-xs tracking-mono-wide font-medium
+           px-5 py-2.5 rounded-sm text-white bg-brand-gradient
+           transition duration-300 hover:-translate-y-0.5 hover:shadow-brand-glow;
+  }
+
+  /* Secondary — mint fill, ink text */
+  .btn-mint {
+    @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
+           px-10 py-4 rounded-sm text-brand-ink bg-brand-mint
+           transition duration-300 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  /* Outline — hairline border on light surfaces */
+  .btn-outline {
+    @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
+           px-10 py-4 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas
+           transition duration-300 hover:border-brand-ink;
+  }
+
+  /* Outline on dark surfaces */
+  .btn-outline-dark {
+    @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
+           px-10 py-4 rounded-sm text-brand-on-dark border border-brand-surface-dark-soft
+           transition duration-300 hover:border-brand-on-dark;
+  }
+
+  /* Classic black pill */
+  .btn-dark {
+    @apply inline-flex items-center justify-center font-mono uppercase text-xs tracking-mono-wide font-medium
+           px-6 py-2.5 rounded-sm text-brand-on-primary bg-brand-primary
+           transition duration-300 hover:bg-stone-800;
+  }
+
+  /* Gradient clip for headline accent words */
+  .gradient-text {
+    @apply bg-brand-gradient bg-clip-text text-transparent;
+  }
+
+  /* Gradient accent rule (thin line) */
+  .rule-gradient {
+    @apply h-1 w-20 bg-brand-gradient rounded-full;
+  }
+}
