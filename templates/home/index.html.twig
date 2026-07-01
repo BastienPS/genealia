@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Généalia - Votre expert en recherches généalogiques{% endblock %}
+
+{% block body %}
+<div class="flex flex-col min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative bg-brand-canvas-dark text-brand-on-dark py-24 px-6 text-center overflow-hidden">
+        <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/paper.png');"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-medium tracking-tightest mb-6">
+                Je vous aide à retrouver vos ancêtres
+            </h1>
+            <p class="text-xl text-brand-on-dark/80 mb-10 max-w-2xl mx-auto leading-relaxed font-normal">
+                Vous souhaitez explorer votre histoire familiale mais vous ne savez pas par où commencer ?
+                Je mets mon expertise et mon temps à votre service pour effectuer vos recherches en archives.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#how-it-works" class="bg-brand-primary text-brand-on-primary font-mono uppercase text-xs tracking-mono-wide py-4 px-8 rounded-sm transition duration-300 shadow-lg text-sm">
+                    Comment ça marche ?
+                </a>
+                <a href="{{ path('app_request_new') }}" class="bg-brand-mint text-brand-ink font-mono uppercase text-xs tracking-mono-wide py-4 px-8 rounded-sm transition duration-300 text-sm">
+                    Déposer une demande
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 px-6 bg-brand-canvas">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Processus</h2>
+                <h3 class="text-3xl md:text-4xl font-medium tracking-tight text-brand-ink mb-4">Un accompagnement simple et efficace</h3>
+                <div class="h-1 w-20 bg-brand-primary mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Step 1 -->
+                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
+                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                        1
+                    </div>
+                    <h3 class="text-xl font-medium text-brand-ink mb-3">Déposez vos indices</h3>
+                    <p class="text-brand-body leading-relaxed">
+                        Remplissez un formulaire simple avec les noms, dates et lieux que vous connaissez. Plus vous donnez d'indices, plus la recherche est précise.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
+                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                        2
+                    </div>
+                    <h3 class="text-xl font-medium text-brand-ink mb-3">Je mène l'enquête</h3>
+                    <p class="text-brand-body leading-relaxed">
+                        Je parcours les archives départementales, les registres paroissiaux et les bases de données spécialisées pour retrouver vos ancêtres.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center p-8 rounded-sm bg-brand-canvas border border-brand-hairline transition duration-300 hover:border-brand-primary">
+                    <div class="w-16 h-16 bg-brand-canvas-dark text-brand-on-dark rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                        3
+                    </div>
+                    <h3 class="text-xl font-medium text-brand-ink mb-3">Récupérez vos documents</h3>
+                    <p class="text-brand-body leading-relaxed">
+                        Une fois la recherche terminée, je dépose les actes et documents trouvés dans votre espace personnel sécurisé.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section class="py-20 px-6 bg-brand-canvas">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+                <img src="https://images.unsplash.com/photo-1581578731548-4978a4d091ep?q=80&w=800&auto=format&fit=crop" alt="Recherche en archives" class="rounded-sm shadow-2xl border border-brand-hairline">
+            </div>
+            <div class="md:w-1/2">
+                <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Pourquoi me choisir ?</h2>
+                <h3 class="text-3xl font-medium tracking-tight text-brand-ink mb-6">L'expertise humaine au service de vos racines</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-brand-on-primary text-xs font-bold">✓</div>
+                        <p class="text-brand-body"><strong class="text-brand-ink">Gain de temps</strong> : Inutile de passer des heures à déchiffrer des écritures anciennes.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white text-xs font-bold">✓</div>
+                        <p class="text-brand-body"><strong class="text-brand-ink">Rigueur méthodologique</strong> : Utilisation des meilleures sources et vérification croisée des données.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white text-xs font-bold">✓</div>
+                        <p class="text-brand-body"><strong class="text-brand-ink">Livraison claire</strong> : Vous recevez des documents organisés et commentés.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

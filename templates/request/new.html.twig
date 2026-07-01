@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Déposer une demande de recherche - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+            <div class="bg-brand-canvas-dark p-8 text-brand-on-dark text-center">
+                <h1 class="text-3xl font-medium tracking-tight mb-2">Votre Demande de Recherche</h1>
+                <p class="text-brand-on-dark/70 text-sm">Remplissez ce formulaire avec le plus de détails possible pour m'aider à orienter mes recherches.</p>
+            </div>
+
+            <div class="p-8">
+                {{ form_start(requestForm) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">Vos coordonnées</h3>
+                            {{ form_row(requestForm.clientName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.clientEmail, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">L'ancêtre recherché</h3>
+                            {{ form_row(requestForm.ancestorFirstName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.ancestorLastName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="mt-8 space-y-6">
+                        <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">Détails et indices</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {{ form_row(requestForm.estimatedBirthDate, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedBirthPlace, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedDeathDate, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedDeathPlace, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                        </div>
+                        {{ form_row(requestForm.researchGoals, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
+                        {{ form_row(requestForm.additionalInfo, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
+                        {{ form_row(requestForm.documents, {'attr': {'class': 'w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-sm file:border-0 file:bg-brand-primary file:text-brand-on-primary file:font-mono file:uppercase file:text-[11px] file:tracking-mono-wide file:cursor-pointer'}}) }}
+                    </div>
+
+                    <div class="mt-10 text-center">
+                        <button type="submit" class="bg-brand-primary text-brand-on-primary font-mono uppercase text-xs tracking-mono-wide py-4 px-10 rounded-sm transition duration-300 shadow-none text-sm">
+                            Envoyer ma demande
+                        </button>
+                    </div>
+                {{ form_end(requestForm) }}
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à l'accueil</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

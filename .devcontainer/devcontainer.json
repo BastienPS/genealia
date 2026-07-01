@@ -1,0 +1,43 @@
+{
+  "name": "Formation - Initiation aux joies du code",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  // La feature docker-in-docker héberge son propre démon dockerd dans le conteneur :
+  // elle exige que le conteneur parent soit lancé en --privileged (gestion des cgroups,
+  // namespaces, overlay FS). VS Code l'injecte automatiquement, mais la CLI devcontainer
+  // et Zed non — il faut donc le déclarer explicitement ici, sinon dockerd échoue en
+  // boucle au démarrage ("Failed to start docker, retrying...").
+  // On garde overrideCommand par défaut (true) : la CLI remplace le CMD de l'image
+  // (/bin/bash, qui sortirait immédiatement sans TTY) par une commande keep-alive, tout
+  // en laissant intact l'entrypoint /usr/local/share/docker-init.sh de la feature, qui
+  // démarre dockerd. Ne PAS mettre overrideCommand:false ici.
+  "runArgs": ["--init", "--privileged"],
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts",
+      "nodeGypDependencies": true
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2",
+      "iptablesSwitchAtRuntime": false
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  // Ports de l'application elle-même (Symfony, Slidev, Vite).
+  "forwardPorts": [8000, 3030, 5173],
+  // Les services simulés (dossier services/) tournent sur le Docker interne (DinD) et
+  // publient leurs ports sur le localhost du devcontainer : Symfony les joint directement
+  // via localhost. On forward ici uniquement les UIs web pour l'accès depuis le navigateur
+  // de l'hôte (les ports 3306 MySQL / 389 LDAP restent internes, consommés par Symfony).
+  "portsAttributes": {
+    "8000": { "label": "Symfony" },
+    "3030": { "label": "Slidev" },
+    "5173": { "label": "Vite" },
+    "80": { "label": "Reverse-proxy (phpMyAdmin / SSO / Mail)" },
+    "5000": { "label": "SSO (mock)" },
+    "1080": { "label": "MailCrab UI" }
+  },
+  "remoteUser": "vscode"
+}

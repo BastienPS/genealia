@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - Demandes de Recherche{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Gestion des Demandes</h1>
+            <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour au site</a>
+        </div>
+
+        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-brand-hairline text-brand-body uppercase text-[11px] font-mono tracking-mono-wide">
+                    <tr class="border-b border-brand-hairline">
+                        <th class="px-6 py-4">Client</th>
+                        <th class="px-6 py-4">Ancêtre</th>
+                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4">Statut</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-brand-hairline">
+                    {% for request in requests %}
+                        <tr class="hover:bg-stone-50 transition duration-150">
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-brand-ink">{{ request.clientName }}</div>
+                                <div class="text-xs text-brand-body">{{ request.clientEmail }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-brand-ink">{{ request.ancestorFirstName }} {{ request.ancestorLastName }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                {{ request.createdAt|date('d/m/Y') }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if request.status == 'pending' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En attente</span>
+                                {% elseif request.status == 'in_progress' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-surface-dark-soft text-brand-on-dark text-[11px] font-mono uppercase tracking-mono-wide">En cours</span>
+                                {% elseif request.status == 'completed' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-mint text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Terminé</span>
+                                {% else %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">{{ request.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ path('app_admin_request_show', {'id': request.id}) }}" class="text-brand-primary hover:underline text-sm font-medium">Détails</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="bg-brand-canvas">
+                            <td colspan="5" class="px-6 py-12 text-center text-brand-body italic text-sm">
+                                Aucune demande de recherche pour le moment.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
