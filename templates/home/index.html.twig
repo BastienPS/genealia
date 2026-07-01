@@ -7,33 +7,34 @@
     <!-- Hero -->
     <section class="relative bg-brand-canvas-dark text-brand-on-dark overflow-hidden">
         <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-brand-orange opacity-30 blur-3xl mix-blend-screen"></div>
-            <div class="absolute top-1/3 -right-10 h-80 w-80 rounded-full bg-brand-magenta opacity-30 blur-3xl mix-blend-screen"></div>
-            <div class="absolute -bottom-24 right-1/4 h-72 w-72 rounded-full bg-brand-periwinkle opacity-30 blur-3xl mix-blend-screen"></div>
+            <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-brand-orange opacity-30 blur-3xl mix-blend-screen animate-blob"></div>
+            <div class="absolute top-1/3 -right-10 h-80 w-80 rounded-full bg-brand-magenta opacity-30 blur-3xl mix-blend-screen animate-blob-slow [animation-delay:4s]"></div>
+            <div class="absolute -bottom-24 right-1/4 h-72 w-72 rounded-full bg-brand-periwinkle opacity-30 blur-3xl mix-blend-screen animate-blob [animation-delay:8s]"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-6 py-28 md:py-36 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-                <span class="eyebrow text-brand-on-dark/70">Généalogie professionnelle</span>
-                <h1 class="mt-5 text-4xl md:text-6xl font-medium tracking-tightest leading-[1.05]">
+                <span class="eyebrow text-brand-on-dark/70 animate-fade-up">Généalogie professionnelle</span>
+                <h1 class="mt-5 text-5xl md:text-6xl lg:text-[64px] font-medium tracking-tightest leading-[1.02] animate-fade-up [animation-delay:90ms]">
                     Retrouvez vos <span class="gradient-text">ancêtres</span>,<br>
                     généalogie après généalogie.
                 </h1>
-                <p class="mt-6 text-lg text-brand-on-dark/80 max-w-xl leading-relaxed font-normal">
+                <p class="mt-6 text-lg text-brand-on-dark/80 max-w-xl leading-relaxed font-normal animate-fade-up [animation-delay:180ms]">
                     Vous souhaitez explorer votre histoire familiale mais ne savez pas par où commencer ? Je mets mon expertise et mon temps à votre service pour effectuer vos recherches en archives.
                 </p>
-                <div class="mt-10 flex flex-wrap gap-4">
+                <div class="mt-10 flex flex-wrap gap-4 animate-fade-up [animation-delay:270ms]">
                     <a href="{{ path('app_request_new') }}" class="btn-cta">Déposer une demande</a>
                     <a href="#how-it-works" class="btn-outline-dark">Comment ça marche ?</a>
                 </div>
             </div>
 
             <!-- Brand ribbon panel -->
-            <div class="relative hidden lg:block">
+            <div class="relative hidden lg:block animate-fade-in [animation-delay:300ms]">
                 <div class="relative aspect-square rounded-sm border border-brand-surface-dark-soft overflow-hidden bg-brand-canvas-dark/40">
-                    <div class="absolute inset-0 bg-brand-gradient opacity-90"></div>
-                    <div class="absolute -top-10 -left-10 h-56 w-56 rounded-full bg-brand-magenta opacity-60 blur-2xl mix-blend-screen"></div>
-                    <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-brand-periwinkle opacity-60 blur-2xl mix-blend-screen"></div>
+                    <div class="absolute inset-0 bg-brand-gradient gradient-animated animate-gradient opacity-90"></div>
+                    <div class="absolute inset-0 opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:18px_18px]"></div>
+                    <div class="absolute -top-10 -left-10 h-56 w-56 rounded-full bg-brand-magenta opacity-60 blur-2xl mix-blend-screen animate-blob"></div>
+                    <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-brand-periwinkle opacity-60 blur-2xl mix-blend-screen animate-blob-slow [animation-delay:5s]"></div>
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
                         <span class="font-mono uppercase text-xs tracking-mono-wide text-white/80">Archives · Registres · Actes</span>
                     </div>
@@ -49,15 +50,15 @@
     <section class="py-20 px-6 bg-brand-canvas">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-brand-mint rounded-sm p-8">
-                <div class="text-5xl font-medium tracking-tightest text-brand-ink">250+</div>
+                <div class="text-6xl font-medium tracking-tightest text-brand-ink">250+</div>
                 <div class="eyebrow mt-3">Ancêtres retrouvés</div>
             </div>
             <div class="bg-brand-periwinkle rounded-sm p-8">
-                <div class="text-5xl font-medium tracking-tightest text-brand-ink">12 ans</div>
+                <div class="text-6xl font-medium tracking-tightest text-brand-ink">12 ans</div>
                 <div class="eyebrow mt-3">D'expérience en archives</div>
             </div>
             <div class="bg-brand-mint rounded-sm p-8">
-                <div class="text-5xl font-medium tracking-tightest text-brand-ink">8</div>
+                <div class="text-6xl font-medium tracking-tightest text-brand-ink">8</div>
                 <div class="eyebrow mt-3">Archives départementales</div>
             </div>
         </div>
@@ -68,7 +69,7 @@
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <span class="eyebrow">Processus</span>
-                <h2 class="mt-4 text-3xl md:text-4xl font-medium tracking-tight text-brand-ink">Un accompagnement simple et efficace</h2>
+                <h2 class="mt-4 text-3xl md:text-[40px] font-medium tracking-tight text-brand-ink">Un accompagnement simple et efficace</h2>
                 <div class="rule-gradient mx-auto mt-6"></div>
             </div>
 
@@ -112,7 +113,7 @@
             </div>
             <div class="md:w-1/2">
                 <span class="eyebrow text-brand-on-dark/70">Pourquoi me choisir ?</span>
-                <h2 class="mt-4 text-3xl md:text-4xl font-medium tracking-tight text-brand-on-dark">L'expertise humaine au service de vos racines</h2>
+                <h2 class="mt-4 text-3xl md:text-[40px] font-medium tracking-tight text-brand-on-dark">L'expertise humaine au service de vos racines</h2>
                 <div class="mt-8 space-y-5">
                     <div class="flex gap-4">
                         <div class="flex-shrink-0 h-6 w-6 rounded-full bg-brand-gradient flex items-center justify-center text-white text-xs font-bold">✓</div>

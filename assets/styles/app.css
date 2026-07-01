@@ -1,7 +1,78 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Scan Twig templates for class usage (v4 native content source). */
+@source "../../templates";
+
+/* ───────────────────────── Brand design tokens (DESIGN.md, Together-AI kit) ───────────────────────── */
+@theme {
+  /* Colors */
+  --color-brand-primary: #000000;
+  --color-brand-on-primary: #ffffff;
+  --color-brand-ink: #000000;
+  --color-brand-body: #959494;
+  --color-brand-hairline: #ebebeb;
+  --color-brand-canvas: #ffffff;
+  --color-brand-canvas-dark: #010120;
+  --color-brand-surface-dark-soft: #313641;
+  --color-brand-on-dark: #ffffff;
+  --color-brand-orange: #fc4c02;
+  --color-brand-magenta: #ef2cc1;
+  --color-brand-periwinkle: #bdbbff;
+  --color-brand-mint: #c8f6f9;
+
+  /* Fonts */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Letter spacing */
+  --tracking-tightest: -0.03em;
+  --tracking-tight: -0.01em;
+  --tracking-mono-wide: 0.04em;
+
+  /* Background images — the three-stop brand gradient (orange → magenta → periwinkle) */
+  --background-image-brand-gradient: linear-gradient(90deg, #fc4c02 0%, #ef2cc1 50%, #bdbbff 100%);
+
+  /* Shadows */
+  --shadow-brand-glow: 0 8px 30px rgba(239, 44, 193, 0.35);
+
+  /* Animations */
+  --animate-blob: blob-drift 18s ease-in-out infinite;
+  --animate-blob-slow: blob-drift 26s ease-in-out infinite;
+  --animate-gradient: gradient-shift 9s ease infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.9s ease-out both;
+}
+
+/* ───────────────────────── Keyframes ───────────────────────── */
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(28px, -22px) scale(1.08); }
+  66% { transform: translate(-22px, 18px) scale(0.96); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ───────────────────────── Custom utilities ───────────────────────── */
+
+/* Enlarges the gradient background so its position can be animated (use with .animate-gradient). */
+@utility gradient-animated {
+  background-size: 200% 200%;
+}
+
+/* ───────────────────────── Reusable components ───────────────────────── */
 @layer components {
   /* Section over-title — uppercase mono eyebrow */
   .eyebrow {
@@ -59,5 +130,15 @@
   /* Gradient accent rule (thin line) */
   .rule-gradient {
     @apply h-1 w-20 bg-brand-gradient rounded-full;
+  }
+}
+
+/* Respect users who prefer reduced motion — disable all animation/transition.
+   Elements fall back to their natural (visible) state, no content is hidden. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -61,6 +61,9 @@ Encore
     // enables Sass/SCSS support
     .enableSassLoader()
 
+    // enables PostCSS support — loads postcss.config.js (Tailwind v4 via @tailwindcss/postcss)
+    .enablePostCssLoader()
+
     // uncomment if you use TypeScript
     .enableTypeScriptLoader()
 
