@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ResearchDocument;
 use App\Entity\ResearchRequest;
+use App\Entity\User;
 use App\Form\ResearchRequestType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,10 +20,23 @@ class RequestController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $researchRequest = new ResearchRequest();
+
+        // Pre-fill the client snapshot from the authenticated account (editable).
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $researchRequest->setClientName($user->getDisplayName());
+            $researchRequest->setClientEmail($user->getEmail());
+        }
+
         $form = $this->createForm(ResearchRequestType::class, $researchRequest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Tie the request to the logged-in client (server-side, not form-spoofable).
+            if ($user instanceof User) {
+                $researchRequest->setClient($user);
+            }
+
             $entityManager->persist($researchRequest);
             $entityManager->flush();
 

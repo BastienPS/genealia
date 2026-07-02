@@ -3,12 +3,23 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
+    # Admin (in-memory) satisfies the client gate too.
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
+        chain_provider:
+            chain:
+                providers: [app_admin_provider, app_user_provider]
         app_admin_provider:
             memory:
                 users:
-                    admin: { password: '$2y$13$xZQWvX3/bal3Jd0GOX8SJuIgzAMgr/fh.tD1x7hO3cXQ1CPwuW8qm', roles: ['ROLE_ADMIN'] }
+                    admin: { password: '%env(ADMIN_PASSWORD_HASH)%', roles: ['ROLE_ADMIN'] }
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
 
     firewalls:
         dev:
@@ -17,7 +28,7 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_admin_provider
+            provider: chain_provider
 
             form_login:
                 login_path: app_login
@@ -27,6 +38,10 @@ security:
                 enable_csrf: true
                 default_target_path: app_admin_requests
 
+            custom_authenticator:
+                - App\Security\GoogleAuthenticator
+                - App\Security\FacebookAuthenticator
+
             logout:
                 path: app_logout
                 target: app_home
@@ -34,6 +49,7 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/request/new, roles: ROLE_USER }
 
 when@test:
     security:

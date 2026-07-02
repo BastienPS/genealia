@@ -52,6 +52,10 @@ class ResearchRequest
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $client = null;
+
     #[ORM\OneToMany(mappedBy: 'researchRequest', targetEntity: ResearchDocument::class, orphanRemoval: true)]
     private Collection $documents;
 
@@ -204,6 +208,17 @@ class ResearchRequest
     public function getDocuments(): Collection
     {
         return $this->documents;
+    }
+
+    public function getClient(): ?User
+    {
+        return $this->client;
+    }
+
+    public function setClient(?User $client): static
+    {
+        $this->client = $client;
+        return $this;
     }
 
     public function addDocument(ResearchDocument $document): static

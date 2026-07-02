@@ -35,7 +35,12 @@
                     <a href="#" class="hover:opacity-80 transition duration-300 text-sm">À propos</a>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="{{ path('app_login') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Connexion</a>
+                    {% if app.user %}
+                        <span class="text-brand-on-dark text-sm hidden sm:inline">Bonjour {{ app.user.userIdentifier }}</span>
+                        <a href="{{ path('app_logout') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Connexion</a>
+                    {% endif %}
                     <a href="{{ path('app_request_new') }}" class="btn-cta-sm">Déposer une demande</a>
                 </div>
             </nav>

@@ -6,7 +6,7 @@
 <div class="bg-brand-canvas py-20 px-6 min-h-[80vh] flex items-center justify-center">
     <div class="w-full max-w-md">
         <div class="text-center mb-10">
-            <span class="eyebrow">Espace Administrateur</span>
+            <span class="eyebrow">Espace Client</span>
             <h1 class="text-4xl font-medium tracking-tightest text-brand-ink mt-3">Connexion</h1>
         </div>
 
@@ -16,6 +16,21 @@
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
             {% endif %}
+
+            <div class="space-y-3">
+                <a href="{{ path('connect_google') }}" class="btn-outline w-full justify-center">
+                    Continuer avec Google
+                </a>
+                <a href="{{ path('connect_facebook') }}" class="btn-outline w-full justify-center">
+                    Continuer avec Facebook
+                </a>
+            </div>
+
+            <div class="flex items-center gap-3 my-6">
+                <div class="h-px flex-1 bg-brand-hairline"></div>
+                <span class="text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">ou espace administrateur</span>
+                <div class="h-px flex-1 bg-brand-hairline"></div>
+            </div>
 
             <form action="{{ path('app_login') }}" method="POST" class="space-y-6">
                 <div class="space-y-2">
