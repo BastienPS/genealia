@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie - Espace des descendants - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-6 p-4 rounded-sm border border-brand-hairline bg-brand-canvas text-sm {% if label == 'success' %}text-brand-ink{% else %}text-brand-body{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Espace des descendants</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Messagerie</h1>
+            </div>
+            <a href="{{ path('app_client_space') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à mon espace</a>
+        </div>
+
+        <div class="bg-brand-canvas p-8 rounded-sm border border-brand-hairline">
+            <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-6 border-b border-brand-hairline pb-4">Échange avec votre généalogiste</h2>
+
+            <div class="space-y-6 mb-8">
+                {% include '_thread.html.twig' with {'messages': messages} %}
+            </div>
+
+            {{ form_start(form, {'action': path('app_client_message_send'), 'attr': {'class': 'space-y-3'}}) }}
+                {{ form_label(form.content, null, {'label_attr': {'class': 'block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body'}}) }}
+                {{ form_widget(form.content) }}
+                {{ form_errors(form.content) }}
+                <div class="text-right">
+                    <button type="submit" class="btn-cta-sm">Envoyer</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

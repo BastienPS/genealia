@@ -14,6 +14,12 @@
                 {% if app.user %}
                     <span class="text-brand-body text-sm hidden sm:inline">Bonjour <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
                 {% endif %}
+                <a href="{{ path('app_client_messages') }}" class="inline-flex items-center gap-2 font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">
+                    Messagerie
+                    {% if messageUnreadCount > 0 %}
+                        <span class="px-1.5 py-0.5 rounded-sm bg-brand-primary text-brand-on-primary text-[10px]">{{ messageUnreadCount }}</span>
+                    {% endif %}
+                </a>
                 <a href="{{ path('app_request_new') }}" class="btn-cta-sm">Déposer une nouvelle demande</a>
             </div>
         </div>

@@ -138,6 +138,11 @@
                     <div class="space-y-3">
                         <div class="text-brand-ink font-medium">{{ request.clientName }}</div>
                         <div class="text-brand-body text-sm">{{ request.clientEmail }}</div>
+                        {% if request.client %}
+                            <a href="{{ path('app_admin_message_for_client', {'clientId': request.client.id}) }}" class="btn-cta-sm w-full text-center block mt-2">Ouvrir la messagerie</a>
+                        {% else %}
+                            <p class="text-brand-body text-xs mt-2 italic">Demande sans compte client associé — messagerie indisponible.</p>
+                        {% endif %}
                     </div>
                 </div>
 

@@ -25,10 +25,10 @@
     <body class="bg-brand-canvas text-brand-ink font-sans antialiased">
         <header class="sticky top-0 z-50 bg-brand-canvas-dark text-brand-on-dark border-b border-brand-surface-dark-soft">
             <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-2">
+                <a href="{{ path('app_home') }}" class="flex items-center gap-2 hover:opacity-80 transition duration-300">
                     <span class="h-2.5 w-2.5 rounded-full bg-brand-gradient"></span>
                     <span class="text-2xl font-medium tracking-tightest">Généalia</span>
-                </div>
+                </a>
                 <div class="hidden md:flex items-center gap-8 text-brand-on-dark font-normal">
                     <a href="{{ path('app_home') }}" class="hover:opacity-80 transition duration-300 text-sm">Accueil</a>
                     <a href="#how-it-works" class="hover:opacity-80 transition duration-300 text-sm">Comment ça marche ?</a>
@@ -37,8 +37,11 @@
                 <div class="flex items-center gap-4">
                     {% if app.user %}
                         <span class="text-brand-on-dark text-sm hidden sm:inline">Bonjour {{ app.user.userIdentifier }}</span>
-                        {% if not is_granted('ROLE_ADMIN') %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_admin_messages') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Messagerie</a>
+                        {% else %}
                             <a href="{{ path('app_client_space') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Mon espace</a>
+                            <a href="{{ path('app_client_messages') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Messagerie</a>
                         {% endif %}
                         <a href="{{ path('app_logout') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">Déconnexion</a>
                     {% else %}

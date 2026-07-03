@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie - Admin - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Administration</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Messagerie</h1>
+            </div>
+            <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour aux demandes</a>
+        </div>
+
+        {% if conversations is empty %}
+            <div class="bg-brand-canvas rounded-sm border-2 border-dashed border-brand-hairline py-16 text-center">
+                <p class="text-brand-body text-sm">Aucune conversation pour le moment. Ouvrez une demande puis « Ouvrir la messagerie » pour écrire à un descendant.</p>
+            </div>
+        {% else %}
+            <div class="bg-brand-canvas rounded-sm overflow-hidden border border-brand-hairline divide-y divide-brand-hairline">
+                {% for conversation in conversations %}
+                    {% set last = lastMessages[conversation.id] ?? null %}
+                    {% set unread = conversation.id in unreadIds %}
+                    <a href="{{ path('app_admin_message_show', {'id': conversation.id}) }}" class="block px-6 py-5 hover:bg-stone-50 transition duration-150">
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-brand-ink font-medium text-sm truncate">{{ conversation.client.displayName ?: conversation.client.email }}</span>
+                                    {% if unread %}
+                                        <span class="px-2 py-0.5 rounded-sm bg-brand-primary text-brand-on-primary text-[10px] font-mono uppercase tracking-mono-wide">Non lu</span>
+                                    {% endif %}
+                                </div>
+                                <div class="text-brand-body text-xs mt-1 truncate">{{ conversation.client.email }}</div>
+                                {% if last %}
+                                    <div class="text-brand-body text-sm mt-3 line-clamp-1">
+                                        <span class="text-[11px] font-mono uppercase tracking-mono-wide">{{ last.isFromAdmin ? 'Vous' : 'Lui/Elle' }} :</span>
+                                        <span class="ml-1">{{ last.content|slice(0, 120) }}{% if last.content|length > 120 %}…{% endif %}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="text-brand-body text-sm mt-3 italic">Conversation vide.</div>
+                                {% endif %}
+                            </div>
+                            <div class="text-brand-body text-[11px] font-mono uppercase tracking-mono-wide flex-shrink-0">
+                                {{ conversation.lastActivityAt ? conversation.lastActivityAt|date('d/m/Y H:i') : conversation.createdAt|date('d/m/Y H:i') }}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

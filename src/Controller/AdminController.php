@@ -2,11 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\ResearchDocument;
 use App\Entity\ResearchRequest;
+use App\Entity\User;
 use App\Form\DocumentUploadType;
+use App\Form\MessageType;
+use App\Repository\ConversationRepository;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,6 +157,125 @@ class AdminController extends AbstractController
         return $researchRequest
             ? $this->redirectToRoute('app_admin_request_show', ['id' => $researchRequest->getId()])
             : $this->redirectToRoute('app_admin_requests');
+    }
+
+    /**
+     * Liste des conversations de messagerie (une par descendant), triées par
+     * dernière activité. Affiche un aperçu du dernier message et un badge de
+     * messages non lus par conversation.
+     */
+    #[Route('/messages', name: 'app_admin_messages', methods: ['GET'])]
+    public function listMessages(
+        ConversationRepository $conversationRepository,
+        MessageRepository $messageRepository
+    ): Response {
+        $conversations = $conversationRepository->findAllOrderByLastActivity();
+        $unreadIds = $messageRepository->findUnreadConversationIdsForAdmin();
+
+        $lastMessages = [];
+        foreach ($conversations as $conversation) {
+            $last = $messageRepository->findLastForConversation($conversation);
+            if ($last !== null) {
+                $lastMessages[$conversation->getId()] = $last;
+            }
+        }
+
+        return $this->render('admin/messages.html.twig', [
+            'conversations' => $conversations,
+            'lastMessages' => $lastMessages,
+            'unreadIds' => $unreadIds,
+        ]);
+    }
+
+    /**
+     * Ouvre une conversation : marque comme lus les messages du client, puis
+     * affiche le fil + le formulaire de réponse admin.
+     */
+    #[Route('/messages/{id}', name: 'app_admin_message_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function showMessage(int $id, ConversationRepository $conversationRepository, MessageRepository $messageRepository): Response
+    {
+        $conversation = $conversationRepository->find($id);
+        if ($conversation === null) {
+            throw $this->createNotFoundException('Conversation non trouvée');
+        }
+
+        $messageRepository->markClientToAdminRead($conversation);
+
+        return $this->renderMessageShowPage($conversation, $messageRepository, $this->createForm(MessageType::class, null, ['label' => 'Répondre au descendant']));
+    }
+
+    /**
+     * Réponse de l'admin dans une conversation. PRG sur succès ; réaffichage
+     * avec le form lié si invalide.
+     */
+    #[Route('/messages/{id}', name: 'app_admin_message_reply', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function replyMessage(
+        int $id,
+        Request $request,
+        ConversationRepository $conversationRepository,
+        MessageRepository $messageRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $conversation = $conversationRepository->find($id);
+        if ($conversation === null) {
+            throw $this->createNotFoundException('Conversation non trouvée');
+        }
+
+        $form = $this->createForm(MessageType::class, null, ['label' => 'Répondre au descendant']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $conversation->touch();
+
+            $message = new Message();
+            $message->setConversation($conversation);
+            $message->setIsFromAdmin(true);
+            $message->setAuthorLabel('Généalia');
+            $message->setContent((string) $form->get('content')->getData());
+
+            $entityManager->persist($message);
+            $entityManager->flush();
+
+            // L'admin consulte le fil en répondant : marque lus les messages client.
+            $messageRepository->markClientToAdminRead($conversation);
+
+            $this->addFlash('success', 'Message envoyé au descendant.');
+
+            return $this->redirectToRoute('app_admin_message_show', ['id' => $conversation->getId()]);
+        }
+
+        return $this->renderMessageShowPage($conversation, $messageRepository, $form);
+    }
+
+    /**
+     * Point d'entrée pour démarrer/ouvrir une conversation depuis un dossier :
+     * résout le client lié à la demande, crée la conversation si nécessaire,
+     * puis redirige vers la page de conversation. 404 si le client n'existe pas
+     * (une demande anonyme sans compte client ne peut pas être messagée).
+     */
+    #[Route('/messages/for-client/{clientId}', name: 'app_admin_message_for_client', requirements: ['clientId' => '\d+'], methods: ['GET'])]
+    public function messageForClient(int $clientId, EntityManagerInterface $entityManager, ConversationRepository $conversationRepository): Response
+    {
+        $client = $entityManager->getRepository(User::class)->find($clientId);
+        if ($client === null) {
+            throw $this->createNotFoundException('Client introuvable');
+        }
+
+        $conversation = $conversationRepository->findOrCreateForClient($client);
+
+        return $this->redirectToRoute('app_admin_message_show', ['id' => $conversation->getId()]);
+    }
+
+    /**
+     * Construit la vue de la page de conversation côté admin (fil + formulaire).
+     */
+    private function renderMessageShowPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form): Response
+    {
+        return $this->render('admin/message_show.html.twig', [
+            'conversation' => $conversation,
+            'messages' => $messageRepository->findThread($conversation),
+            'form' => $form->createView(),
+        ]);
     }
 
     private function getUploadDir(int $requestId): string

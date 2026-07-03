@@ -2,13 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\ResearchDocument;
 use App\Entity\ResearchRequest;
 use App\Entity\User;
+use App\Form\MessageType;
+use App\Repository\ConversationRepository;
+use App\Repository\MessageRepository;
 use App\Repository\ResearchRequestRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,7 +27,7 @@ class ClientController extends AbstractController
      * connecté. Lecture seule.
      */
     #[Route('', name: 'app_client_space')]
-    public function space(ResearchRequestRepository $repository): Response
+    public function space(ResearchRequestRepository $repository, MessageRepository $messageRepository): Response
     {
         $client = $this->getClientUser();
         if ($client === null) {
@@ -32,6 +39,7 @@ class ClientController extends AbstractController
 
         return $this->render('client/space.html.twig', [
             'requests' => $repository->findByClient($client),
+            'messageUnreadCount' => $messageRepository->findUnreadCountForClient($client),
         ]);
     }
 
@@ -87,6 +95,87 @@ class ClientController extends AbstractController
 
         return new BinaryFileResponse($absolutePath, headers: [
             'Content-Disposition' => 'inline; filename="' . $document->getFileName() . '"',
+        ]);
+    }
+
+    /**
+     * Messagerie : fil unique entre le descendant et l'admin. La conversation
+     * est résolue depuis l'utilisateur connecté (aucun id dans l'URL) — un
+     * client ne peut physiquement pas atteindre le fil d'un autre descendant.
+     * L'ouverture marque comme lus les messages reçus de l'admin.
+     */
+    #[Route('/messages', name: 'app_client_messages', methods: ['GET'])]
+    public function messages(ConversationRepository $conversationRepository, MessageRepository $messageRepository): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            // L'admin en mémoire n'a pas de fil client : on le renvoie vers
+            // son espace, comme pour le tableau de bord.
+            return $this->redirectToRoute('app_admin_messages');
+        }
+
+        $conversation = $conversationRepository->findOrCreateForClient($client);
+        $messageRepository->markAdminToClientRead($conversation);
+
+        return $this->renderMessagesPage($conversation, $messageRepository, $this->createForm(MessageType::class));
+    }
+
+    /**
+     * Envoi d'un message par le client. PRG : en cas de succès on redirige
+     * vers la page de lecture ; en cas de formulaire invalide on réaffiche la
+     * page avec le formulaire lié (erreurs affichées).
+     */
+    #[Route('/messages', name: 'app_client_message_send', methods: ['POST'])]
+    public function sendMessage(
+        Request $request,
+        ConversationRepository $conversationRepository,
+        MessageRepository $messageRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(MessageType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $conversation = $conversationRepository->findOrCreateForClient($client);
+            $conversation->touch();
+
+            $message = new Message();
+            $message->setConversation($conversation);
+            $message->setIsFromAdmin(false);
+            $message->setAuthorLabel($client->getDisplayName());
+            $message->setContent((string) $form->get('content')->getData());
+
+            $entityManager->persist($message);
+            $entityManager->flush();
+
+            // Le client consulte le fil en répondant : marque lus les messages admin.
+            $messageRepository->markAdminToClientRead($conversation);
+
+            $this->addFlash('success', 'Message envoyé.');
+
+            return $this->redirectToRoute('app_client_messages');
+        }
+
+        // Formulaire invalide (ex. vide) : on réaffiche la page avec le form lié.
+        $conversation = $conversationRepository->findOrCreateForClient($client);
+
+        return $this->renderMessagesPage($conversation, $messageRepository, $form);
+    }
+
+    /**
+     * Construit la vue de la page messagerie côté client (fil + formulaire).
+     */
+    private function renderMessagesPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form): Response
+    {
+        return $this->render('client/messages.html.twig', [
+            'conversation' => $conversation,
+            'messages' => $messageRepository->findThread($conversation),
+            'form' => $form->createView(),
         ]);
     }
 
