@@ -37,6 +37,9 @@
                 <div class="flex items-center gap-4">
                     {% if app.user %}
                         <span class="text-brand-on-dark text-sm hidden sm:inline">Bonjour {{ app.user.userIdentifier }}</span>
+                        {% if not is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_client_space') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Mon espace</a>
+                        {% endif %}
                         <a href="{{ path('app_logout') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">Déconnexion</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Connexion</a>

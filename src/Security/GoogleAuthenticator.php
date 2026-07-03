@@ -51,7 +51,7 @@ class GoogleAuthenticator extends OAuth2Authenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return new RedirectResponse($this->urlGenerator->generate('app_request_new'));
+        return new RedirectResponse($this->urlGenerator->generate('app_client_space'));
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace des descendants - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Espace des descendants</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Mes demandes de recherche</h1>
+            </div>
+            <div class="flex items-center gap-6">
+                {% if app.user %}
+                    <span class="text-brand-body text-sm hidden sm:inline">Bonjour <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
+                {% endif %}
+                <a href="{{ path('app_request_new') }}" class="btn-cta-sm">Déposer une nouvelle demande</a>
+            </div>
+        </div>
+
+        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-brand-hairline text-brand-body">
+                    <tr class="border-b border-brand-hairline">
+                        <th class="eyebrow px-6 py-4">Ancêtre</th>
+                        <th class="eyebrow px-6 py-4">Date</th>
+                        <th class="eyebrow px-6 py-4">Statut</th>
+                        <th class="eyebrow px-6 py-4">Documents</th>
+                        <th class="eyebrow px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-brand-hairline">
+                    {% for request in requests %}
+                        <tr class="hover:bg-stone-50 transition duration-150">
+                            <td class="px-6 py-4">
+                                <div class="text-brand-ink">{{ request.ancestorFirstName }} {{ request.ancestorLastName }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                {{ request.createdAt|date('d/m/Y') }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if request.status == 'pending' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En attente</span>
+                                {% elseif request.status == 'in_progress' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-surface-dark-soft text-brand-on-dark text-[11px] font-mono uppercase tracking-mono-wide">En cours</span>
+                                {% elseif request.status == 'completed' %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-mint text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Terminé</span>
+                                {% else %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">{{ request.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                {{ request.documents|length }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ path('app_client_request_show', {'id': request.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Détails</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="bg-brand-canvas">
+                            <td colspan="5" class="px-6 py-12 text-center">
+                                <div class="border-2 border-dashed border-brand-hairline rounded-sm py-10 px-6">
+                                    <p class="text-brand-body text-sm mb-6">Vous n'avez encore déposé aucune demande.</p>
+                                    <a href="{{ path('app_request_new') }}" class="btn-cta">Déposer une demande</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

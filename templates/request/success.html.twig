@@ -17,7 +17,10 @@
                 "Je vous contacterai par email dès que j'aurai des résultats ou si j'ai besoin de précisions supplémentaires sur vos ancêtres."
             </p>
         </div>
-        <a href="{{ path('app_home') }}" class="btn-cta">Retour à l'accueil</a>
+        <div class="flex items-center justify-center gap-4">
+            <a href="{{ path('app_home') }}" class="btn-outline">Retour à l'accueil</a>
+            <a href="{{ path('app_client_space') }}" class="btn-cta">Accéder à mon espace</a>
+        </div>
     </div>
 </div>
 {% endblock %}

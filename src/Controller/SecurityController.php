@@ -13,10 +13,10 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // Si l'utilisateur est déjà authentifié, on le renvoie vers la zone qui
-        // le concerne : l'admin vers l'espace admin, un client vers le formulaire de demande.
+        // le concerne : l'admin vers l'espace admin, un client vers son espace.
         if ($this->getUser()) {
             return $this->redirectToRoute(
-                $this->isGranted('ROLE_ADMIN') ? 'app_admin_requests' : 'app_request_new'
+                $this->isGranted('ROLE_ADMIN') ? 'app_admin_requests' : 'app_client_space'
             );
         }
 
