@@ -12,9 +12,12 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Si l'utilisateur est déjà authentifié, on le renvoie vers l'admin.
+        // Si l'utilisateur est déjà authentifié, on le renvoie vers la zone qui
+        // le concerne : l'admin vers l'espace admin, un client vers le formulaire de demande.
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_admin_requests');
+            return $this->redirectToRoute(
+                $this->isGranted('ROLE_ADMIN') ? 'app_admin_requests' : 'app_request_new'
+            );
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
