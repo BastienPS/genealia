@@ -12,13 +12,18 @@ use App\Form\MessageType;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -214,7 +219,8 @@ class AdminController extends AbstractController
         Request $request,
         ConversationRepository $conversationRepository,
         MessageRepository $messageRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
     ): Response {
         $conversation = $conversationRepository->find($id);
         if ($conversation === null) {
@@ -239,12 +245,53 @@ class AdminController extends AbstractController
             // L'admin consulte le fil en répondant : marque lus les messages client.
             $messageRepository->markClientToAdminRead($conversation);
 
-            $this->addFlash('success', 'Message envoyé au descendant.');
+            // Notification e-mail au client (non-fatale : un échec SMTP ne doit
+            // pas empêcher l'envoi du message dans le fil).
+            $mailSent = $this->notifyClientOfAdminMessage($conversation, $message, $mailer);
+            $this->addFlash(
+                $mailSent ? 'success' : 'warning',
+                $mailSent
+                    ? 'Message envoyé au descendant.'
+                    : 'Message enregistré, mais la notification e-mail n\'a pas pu être envoyée.'
+            );
 
             return $this->redirectToRoute('app_admin_message_show', ['id' => $conversation->getId()]);
         }
 
         return $this->renderMessageShowPage($conversation, $messageRepository, $form);
+    }
+
+    /**
+     * Envoie au client un courriel le prévenant qu'un message admin l'attend
+     * dans son fil. Retourne false si l'envoi échoue (transport indisponible,
+     * adresse invalide…) — l'appelant garde le comportement non-fatal.
+     */
+    private function notifyClientOfAdminMessage(Conversation $conversation, Message $message, MailerInterface $mailer): bool
+    {
+        $client = $conversation->getClient();
+        if ($client === null || $client->getEmail() === null || $client->getEmail() === '') {
+            return false;
+        }
+
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->getParameter('mailer_from'), 'Généalia'))
+            ->to($client->getEmail())
+            ->subject('Vous avez reçu un message de votre généalogiste')
+            ->htmlTemplate('email/admin_message_notification.html.twig')
+            ->textTemplate('email/admin_message_notification.txt.twig')
+            ->context([
+                'client_name' => $client->getDisplayName() ?: $client->getEmail(),
+                'message_content' => $message->getContent(),
+                'thread_url' => $this->generateUrl('app_client_messages', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
+            ]);
+
+        try {
+            $mailer->send($email);
+        } catch (TransportExceptionInterface) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
