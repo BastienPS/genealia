@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales - Généalia{% endblock %}
+
+{% block body %}
+<section class="bg-brand-canvas px-6 py-24">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-medium tracking-tight text-brand-ink mb-10">Mentions légales</h1>
+
+        <div class="prose-legal space-y-8 text-brand-body leading-relaxed">
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Éditeur du site</h2>
+                <p>
+                    Le site <strong>genealia.fr</strong> est édité par [Nom de l'éditeur — à compléter],
+                    entrepreneur individuel, exerçant l'activité de généalogiste.
+                </p>
+                <p class="mt-2">Adresse : [à compléter] · Email : [à compléter]</p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Hébergement</h2>
+                <p>
+                    Le site est hébergé par IONOS, sur un serveur cloud (Cloud Server) situé dans l'Union européenne.
+                    IONOS SARL — 7, place de la Gare, 57200 Sarreguemines, France.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Propriété intellectuelle</h2>
+                <p>
+                    L'ensemble des éléments de ce site (textes, charte graphique, logo) est la propriété de l'éditeur.
+                    Toute reproduction, même partielle, est interdite sans autorisation.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Responsabilité</h2>
+                <p>
+                    L'éditeur met tout en œuvre pour assurer l'exactitude des informations publiées mais ne saurait
+                    être tenu responsable des éventuelles erreurs ou de l'indisponibilité temporaire du site.
+                </p>
+            </div>
+        </div>
+
+        <p class="mt-12 text-sm text-brand-hairline italic">
+            [Les mentions entre crochets sont à compléter avec vos informations d'éditeur avant publication.]
+        </p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité - Généalia{% endblock %}
+
+{% block body %}
+<section class="bg-brand-canvas px-6 py-24">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-medium tracking-tight text-brand-ink mb-6">Politique de confidentialité</h1>
+        <p class="text-brand-body mb-10 leading-relaxed">
+            La présente politique décrit comment Généalia collecte et traite vos données personnelles
+            dans le cadre du dépôt et du suivi d'une demande de recherche généalogique.
+            Elle est conforme au Règlement Général sur la Protection des Données (RGPD).
+        </p>
+
+        <div class="space-y-8 text-brand-body leading-relaxed">
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Responsable du traitement</h2>
+                <p>[Nom de l'éditeur — à compléter] · Email : [à compléter]</p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Données collectées</h2>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li>Identifiant de connexion (adresse e-mail) et nom affiché, obtenus via votre connexion Google ou Facebook.</li>
+                    <li>Informations transmises dans votre demande : ancêtres recherchés, indices, périodes et lieux.</li>
+                    <li>Documents déposés (actes d'état civil, arbres, photos) et documents produits par le généalogiste.</li>
+                    <li>Messages échangés via la messagerie intégrée.</li>
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Finalités</h2>
+                <p>
+                    Les données servent exclusivement à instruire votre demande de recherche, à communiquer avec vous
+                    et à vous transmettre les résultats. Elles ne font l'objet d'aucune cession à des tiers.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Durée de conservation</h2>
+                <p>
+                    Les données sont conservées le temps nécessaire à l'instruction de la demande puis archivées
+                    [à compléter : durée] à des fins de preuve, sauf demande de suppression de votre part.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Connexion via Google / Facebook</h2>
+                <p>
+                    Le site propose une authentification via Google et Facebook. Ces fournisseurs peuvent collecter,
+                    selon vos réglages, des données lors de la connexion. Référez-vous à leurs politiques respectives.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">Vos droits</h2>
+                <p>
+                    Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement et
+                    d'opposition. Pour les exercer, écrivez à [email de contact]. Vous pouvez également introduire
+                    une réclamation auprès de la CNIL (www.cnil.fr).
+                </p>
+            </div>
+        </div>
+
+        <p class="mt-12 text-sm text-brand-hairline italic">
+            [Les mentions entre crochets sont à compléter avant publication. Cette page doit être rendue publique
+            pour valider les écrans de consentement Google et Facebook.]
+        </p>
+    </div>
+</section>
+{% endblock %}

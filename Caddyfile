@@ -1,0 +1,15 @@
+{
+	# Email used by Let's Encrypt for certificate expiry notices.
+	email {$ACME_EMAIL:admin@genealia.fr}
+}
+
+{$SERVER_NAME:genealia.fr} {
+	root * /app/public
+	encode zstd gzip
+
+	# Long-cache the versioned Webpack Encore assets.
+	header /build/* Cache-Control "public, max-age=31536000, immutable"
+
+	php_server
+	file_server
+}

@@ -24,3 +24,7 @@ yarn-error.log
 /.idea/
 /.vscode/
 ###< editor config ###
+
+###> production compose override (local secrets/server-specific) ###
+/compose.prod.override.yaml
+###< production compose override ###

@@ -1,0 +1,37 @@
+# Production deployment for Généalia — VPS + FrankenPHP (Caddy auto-TLS).
+#
+# Secrets live in .env.prod.local (gitignored, created on the server); the
+# non-secret prod settings are set explicitly below. The var/ directory
+# (SQLite DB + uploaded client documents) is persisted in a named volume so
+# data survives image rebuilds.
+#
+#   cp .env.local.example .env.prod.local   # then fill in the secrets
+#   docker compose -f compose.prod.yaml up -d --build
+#   docker compose -f compose.prod.yaml exec app php bin/console doctrine:migrations:migrate --no-interaction
+
+services:
+  app:
+    build: .
+    image: genealia:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: "0"
+      SERVER_NAME: genealia.fr www.genealia.fr
+      ACME_EMAIL: admin@genealia.fr
+      DEFAULT_URI: https://genealia.fr
+    env_file:
+      - .env.prod.local
+    volumes:
+      - var_data:/app/var       # SQLite DB + uploaded documents (back this up)
+      - caddy_data:/data        # Let's Encrypt cert store
+      - caddy_config:/config
+
+volumes:
+  var_data:
+  caddy_data:
+  caddy_config:

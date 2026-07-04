@@ -1,0 +1,29 @@
+# Build artifacts & runtime data
+/var/
+/node_modules/
+/public/build/
+
+# VCS & editor
+/.git/
+/.gitignore
+/.claude/
+/.devcontainer/
+/.idea/
+/.vscode/
+/.phpactor.json
+
+# Secrets (never bake into the image)
+/.env.local
+/.env.*.local
+/.env.prod.local
+
+# Dev-only compose overrides
+/compose.override.yaml
+/compose.prod.override.yaml
+
+# Misc
+/php-config/
+/phpunit.dist.xml
+/DESIGN.md
+/.editorconfig
+/cargo
