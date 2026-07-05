@@ -272,11 +272,11 @@ class AdminController extends AbstractController
     {
         $client = $conversation->getClient();
         if ($client === null) {
-            $logger->warning('notifyClientOfAdminMessage: pas de client lié à la conversation', ['conversation' => $conversation->getId()]);
+            $logger->error('notifyClientOfAdminMessage: pas de client lié à la conversation', ['conversation' => $conversation->getId()]);
             return false;
         }
         if ($client->getEmail() === null || $client->getEmail() === '') {
-            $logger->warning('notifyClientOfAdminMessage: client sans email', ['client' => $client->getId()]);
+            $logger->error('notifyClientOfAdminMessage: client sans email', ['client' => $client->getId()]);
             return false;
         }
 
@@ -299,7 +299,7 @@ class AdminController extends AbstractController
             return false;
         }
 
-        $logger->info('notifyClientOfAdminMessage: mail envoyé', ['to' => $client->getEmail()]);
+        $logger->error('notifyClientOfAdminMessage: mail envoyé', ['to' => $client->getEmail()]);
         return true;
     }
 
