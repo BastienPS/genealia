@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - Généalia{% endblock %}
+
+{% block body %}
+<section class="bg-brand-canvas px-6 py-24">
+    <div class="max-w-3xl mx-auto">
+        <p class="eyebrow text-brand-body mb-3">Contact</p>
+        <h1 class="text-4xl font-medium tracking-tight text-brand-ink mb-6">Écrivez à votre généalogiste</h1>
+        <p class="text-brand-body leading-relaxed mb-10">
+            Une question, un projet de recherche, une branche d'arbre à débloquer&nbsp;?
+            Utilisez le formulaire ci-dessous&nbsp;: votre message sera transmis directement à
+            <strong>admin@genealia.fr</strong>, et vous recevrez une réponse par e-mail.
+        </p>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-6 p-4 rounded-sm border border-brand-hairline bg-brand-canvas text-sm {% if label == 'success' %}text-brand-ink{% else %}text-brand-body{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="bg-brand-canvas p-8 rounded-sm border border-brand-hairline">
+            {{ form_start(contact_form, {'attr': {'class': 'space-y-5'}}) }}
+                <div>
+                    {{ form_label(contact_form.name, null, {'label_attr': {'class': 'block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body mb-2'}}) }}
+                    {{ form_widget(contact_form.name) }}
+                    {{ form_errors(contact_form.name) }}
+                </div>
+                <div>
+                    {{ form_label(contact_form.email, null, {'label_attr': {'class': 'block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body mb-2'}}) }}
+                    {{ form_widget(contact_form.email) }}
+                    {{ form_errors(contact_form.email) }}
+                </div>
+                <div>
+                    {{ form_label(contact_form.message, null, {'label_attr': {'class': 'block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body mb-2'}}) }}
+                    {{ form_widget(contact_form.message) }}
+                    {{ form_errors(contact_form.message) }}
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn-cta">Envoyer le message</button>
+                </div>
+            {{ form_end(contact_form) }}
+        </div>
+    </div>
+</section>
+{% endblock %}
