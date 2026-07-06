@@ -32,7 +32,7 @@
                 <div class="hidden md:flex items-center gap-8 text-brand-on-dark font-normal">
                     <a href="{{ path('app_home') }}" class="hover:opacity-80 transition duration-300 text-sm">Accueil</a>
                     <a href="#how-it-works" class="hover:opacity-80 transition duration-300 text-sm">Comment ça marche ?</a>
-                    <a href="#" class="hover:opacity-80 transition duration-300 text-sm">À propos</a>
+                    <a href="{{ path('app_legal_apropos') }}" class="hover:opacity-80 transition duration-300 text-sm">À propos</a>
                 </div>
                 <div class="flex items-center gap-4">
                     {% if app.user %}
@@ -79,6 +79,7 @@
                 <div>
                     <h4 class="eyebrow mb-4">Légal</h4>
                     <ul class="space-y-2 text-sm">
+                        <li><a href="{{ path('app_legal_apropos') }}" class="hover:text-brand-primary transition">À propos</a></li>
                         <li><a href="{{ path('app_legal_mentions') }}" class="hover:text-brand-primary transition">Mentions légales</a></li>
                         <li><a href="{{ path('app_legal_confidentialite') }}" class="hover:text-brand-primary transition">Confidentialité</a></li>
                     </ul>
