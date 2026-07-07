@@ -12,7 +12,6 @@ use App\Form\MessageType;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -221,8 +220,7 @@ class AdminController extends AbstractController
         ConversationRepository $conversationRepository,
         MessageRepository $messageRepository,
         EntityManagerInterface $entityManager,
-        MailerInterface $mailer,
-        LoggerInterface $logger
+        MailerInterface $mailer
     ): Response {
         $conversation = $conversationRepository->find($id);
         if ($conversation === null) {
@@ -249,7 +247,7 @@ class AdminController extends AbstractController
 
             // Notification e-mail au client (non-fatale : un échec SMTP ne doit
             // pas empêcher l'envoi du message dans le fil).
-            $mailSent = $this->notifyClientOfAdminMessage($conversation, $message, $mailer, $logger);
+            $mailSent = $this->notifyClientOfAdminMessage($conversation, $message, $mailer);
             $this->addFlash(
                 $mailSent ? 'success' : 'warning',
                 $mailSent
@@ -268,15 +266,10 @@ class AdminController extends AbstractController
      * dans son fil. Retourne false si l'envoi échoue (transport indisponible,
      * adresse invalide…) — l'appelant garde le comportement non-fatal.
      */
-    private function notifyClientOfAdminMessage(Conversation $conversation, Message $message, MailerInterface $mailer, LoggerInterface $logger): bool
+    private function notifyClientOfAdminMessage(Conversation $conversation, Message $message, MailerInterface $mailer): bool
     {
         $client = $conversation->getClient();
-        if ($client === null) {
-            $logger->error('notifyClientOfAdminMessage: pas de client lié à la conversation', ['conversation' => $conversation->getId()]);
-            return false;
-        }
-        if ($client->getEmail() === null || $client->getEmail() === '') {
-            $logger->error('notifyClientOfAdminMessage: client sans email', ['client' => $client->getId()]);
+        if ($client === null || $client->getEmail() === null || $client->getEmail() === '') {
             return false;
         }
 
@@ -294,12 +287,10 @@ class AdminController extends AbstractController
 
         try {
             $mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            $logger->error('notifyClientOfAdminMessage: échec envoi mail', ['exception' => $e->getMessage(), 'to' => $client->getEmail()]);
+        } catch (TransportExceptionInterface) {
             return false;
         }
 
-        $logger->error('notifyClientOfAdminMessage: mail envoyé', ['to' => $client->getEmail()]);
         return true;
     }
 

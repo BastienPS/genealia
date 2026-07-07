@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,45 +22,35 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request, MailerInterface $mailer, LoggerInterface $logger): Response
+    public function index(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if (!$form->isValid()) {
-                $errors = [];
-                foreach ($form->getErrors(true) as $error) {
-                    $errors[] = $error->getOrigin()?->getName().' : '.$error->getMessage();
-                }
-                $logger->error('Contact form invalid', ['errors' => implode(' | ', $errors)]);
-            } else {
-                $data = $form->getData();
-                $name = trim((string) ($data['name'] ?? ''));
-                $senderEmail = trim((string) ($data['email'] ?? ''));
-                $message = trim((string) ($data['message'] ?? ''));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $name = trim((string) ($data['name'] ?? ''));
+            $senderEmail = trim((string) ($data['email'] ?? ''));
+            $message = trim((string) ($data['message'] ?? ''));
 
-                $recipient = (string) $this->getParameter('mailer_from');
+            $recipient = (string) $this->getParameter('mailer_from');
 
-                $email = (new Email())
-                    ->from(new Address($recipient, 'Généalia (formulaire de contact)'))
-                    ->to($recipient)
-                    ->replyTo(new Address($senderEmail, $name))
-                    ->subject('Nouveau message de contact — ' . $name)
-                    ->text($this->buildTextBody($name, $senderEmail, $message))
-                    ->html($this->buildHtmlBody($name, $senderEmail, $message));
+            $email = (new Email())
+                ->from(new Address($recipient, 'Généalia (formulaire de contact)'))
+                ->to($recipient)
+                ->replyTo(new Address($senderEmail, $name))
+                ->subject('Nouveau message de contact — ' . $name)
+                ->text($this->buildTextBody($name, $senderEmail, $message))
+                ->html($this->buildHtmlBody($name, $senderEmail, $message));
 
-                try {
-                    $mailer->send($email);
-                    $logger->error('Contact mail envoyé', ['from' => $recipient, 'to' => $recipient, 'reply_to' => $senderEmail]);
-                    $this->addFlash('success', 'Votre message a bien été envoyé. Nous vous répondrons par e-mail.');
-                } catch (TransportExceptionInterface $e) {
-                    $logger->error('Contact mail échec', ['exception' => $e->getMessage()]);
-                    $this->addFlash('error', "Une erreur technique est survenue lors de l'envoi. Merci de réessayer ou de nous écrire directement à admin@genealia.fr.");
-                }
-
-                return $this->redirectToRoute('app_contact');
+            try {
+                $mailer->send($email);
+                $this->addFlash('success', 'Votre message a bien été envoyé. Nous vous répondrons par e-mail.');
+            } catch (TransportExceptionInterface) {
+                $this->addFlash('error', "Une erreur technique est survenue lors de l'envoi. Merci de réessayer ou de nous écrire directement à admin@genealia.fr.");
             }
+
+            return $this->redirectToRoute('app_contact');
         }
 
         return $this->render('contact/index.html.twig', [
