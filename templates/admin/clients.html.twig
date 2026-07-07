@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients inscrits - Admin - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Administration</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Clients inscrits</h1>
+            </div>
+            <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour aux demandes</a>
+        </div>
+
+        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-brand-hairline text-brand-body">
+                    <tr class="border-b border-brand-hairline">
+                        <th class="eyebrow px-6 py-4">Client</th>
+                        <th class="eyebrow px-6 py-4">Connexion</th>
+                        <th class="eyebrow px-6 py-4">Inscrit le</th>
+                        <th class="eyebrow px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-brand-hairline">
+                    {% for client in clients %}
+                        <tr class="hover:bg-stone-50 transition duration-150">
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-brand-ink">{{ client.displayName ?: '—' }}</div>
+                                <div class="text-xs text-brand-body">{{ client.email }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-brand-body">
+                                {% if client.googleId %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Google</span>
+                                {% elseif client.facebookId %}
+                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Facebook</span>
+                                {% else %}
+                                    <span class="text-brand-hairline">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                {{ client.createdAt ? client.createdAt|date('d/m/Y') : '—' }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ path('app_admin_message_for_client', {'clientId': client.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Messagerie</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="bg-brand-canvas">
+                            <td colspan="4" class="px-6 py-12 text-center text-brand-body italic text-sm">
+                                Aucun client inscrit pour le moment.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

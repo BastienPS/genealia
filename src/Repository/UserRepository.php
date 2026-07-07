@@ -23,6 +23,24 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * Renvoie les comptes clients (ROLE_USER sans ROLE_ADMIN), du plus
+     * récemment inscrit au plus ancien. Le filtrage se fait en PHP car les
+     * rôles sont stockés dans une colonne JSON : pour un petit volume
+     * d'inscrits c'est plus simple et fiable qu'une requête DQL sur du JSON.
+     *
+     * @return list<User>
+     */
+    public function findClients(): array
+    {
+        $users = $this->findBy([], ['createdAt' => 'DESC']);
+
+        return array_values(array_filter(
+            $users,
+            static fn (User $u): bool => !in_array('ROLE_ADMIN', $u->getRoles(), true)
+        ));
+    }
+
+    /**
      * Resolve a local User for an OAuth login, merging accounts by email.
      *
      * If a User with the provider's email already exists (e.g. previously

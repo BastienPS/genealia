@@ -11,6 +11,7 @@
                 {% if app.user %}
                     <span class="text-brand-body text-sm">Connecté en tant que <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
                 {% endif %}
+                <a href="{{ path('app_admin_clients') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Clients</a>
                 <a href="{{ path('app_home') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour au site</a>
                 <a href="{{ path('app_logout') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Déconnexion</a>
             </div>

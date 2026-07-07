@@ -11,6 +11,7 @@ use App\Form\DocumentUploadType;
 use App\Form\MessageType;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,6 +36,14 @@ class AdminController extends AbstractController
 
         return $this->render('admin/requests.html.twig', [
             'requests' => $repository->findBy([], ['createdAt' => 'DESC']),
+        ]);
+    }
+
+    #[Route('/clients', name: 'app_admin_clients')]
+    public function listClients(UserRepository $userRepository): Response
+    {
+        return $this->render('admin/clients.html.twig', [
+            'clients' => $userRepository->findClients(),
         ]);
     }
 
