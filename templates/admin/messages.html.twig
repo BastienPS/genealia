@@ -14,11 +14,11 @@
         </div>
 
         {% if conversations is empty %}
-            <div class="bg-brand-canvas rounded-sm border-2 border-dashed border-brand-hairline py-16 text-center">
+            <div class="bg-brand-canvas rounded-2xl border-2 border-dashed border-brand-hairline py-16 text-center">
                 <p class="text-brand-body text-sm">Aucune conversation pour le moment. Ouvrez une demande puis « Ouvrir la messagerie » pour écrire à un descendant.</p>
             </div>
         {% else %}
-            <div class="bg-brand-canvas rounded-sm overflow-hidden border border-brand-hairline divide-y divide-brand-hairline">
+            <div class="bg-brand-canvas rounded-2xl overflow-hidden border border-brand-hairline divide-y divide-brand-hairline">
                 {% for conversation in conversations %}
                     {% set last = lastMessages[conversation.id] ?? null %}
                     {% set unread = conversation.id in unreadIds %}
@@ -28,7 +28,7 @@
                                 <div class="flex items-center gap-3">
                                     <span class="text-brand-ink font-medium text-sm truncate">{{ conversation.client.displayName ?: conversation.client.email }}</span>
                                     {% if unread %}
-                                        <span class="px-2 py-0.5 rounded-sm bg-brand-primary text-brand-on-primary text-[10px] font-mono uppercase tracking-mono-wide">Non lu</span>
+                                        <span class="px-2 py-0.5 rounded-2xl bg-brand-primary text-brand-on-primary text-[10px] font-mono uppercase tracking-mono-wide">Non lu</span>
                                     {% endif %}
                                 </div>
                                 <div class="text-brand-body text-xs mt-1 truncate">{{ conversation.client.email }}</div>

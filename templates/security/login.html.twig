@@ -10,9 +10,9 @@
             <h1 class="text-4xl font-medium tracking-tightest text-brand-ink mt-3">Connexion</h1>
         </div>
 
-        <div class="bg-brand-canvas p-8 rounded-sm border border-brand-hairline">
+        <div class="bg-brand-canvas p-8 rounded-2xl border border-brand-hairline">
             {% if error %}
-                <div class="mb-6 p-3 rounded-sm border border-brand-orange/40 bg-brand-orange/5 text-sm text-brand-orange">
+                <div class="mb-6 p-3 rounded-2xl border border-brand-orange/40 bg-brand-orange/5 text-sm text-brand-orange">
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
             {% endif %}
@@ -36,13 +36,13 @@
                 <div class="space-y-2">
                     <label for="_username" class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Identifiant</label>
                     <input type="text" id="_username" name="_username" value="{{ last_username }}" autocomplete="username" required autofocus
-                           class="w-full p-3 rounded-sm border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
+                           class="w-full p-3 rounded-2xl border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label for="_password" class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Mot de passe</label>
                     <input type="password" id="_password" name="_password" autocomplete="current-password" required
-                           class="w-full p-3 rounded-sm border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
+                           class="w-full p-3 rounded-2xl border border-brand-hairline bg-brand-canvas text-brand-ink focus:ring-1 focus:ring-brand-primary outline-none text-sm">
                 </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

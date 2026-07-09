@@ -13,7 +13,7 @@
             <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour aux demandes</a>
         </div>
 
-        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-brand-hairline text-brand-body">
                     <tr class="border-b border-brand-hairline">
@@ -32,9 +32,9 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-brand-body">
                                 {% if client.googleId %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Google</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Google</span>
                                 {% elseif client.facebookId %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Facebook</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Facebook</span>
                                 {% else %}
                                     <span class="text-brand-hairline">—</span>
                                 {% endif %}
@@ -43,7 +43,7 @@
                                 {{ client.createdAt ? client.createdAt|date('d/m/Y') : '—' }}
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <a href="{{ path('app_admin_message_for_client', {'clientId': client.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Messagerie</a>
+                                <a href="{{ path('app_admin_message_for_client', {'clientId': client.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Messagerie</a>
                             </td>
                         </tr>
                     {% else %}

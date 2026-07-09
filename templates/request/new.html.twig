@@ -5,7 +5,7 @@
 {% block body %}
 <div class="bg-brand-canvas py-12 px-6 min-h-screen">
     <div class="max-w-3xl mx-auto">
-        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
             <div class="bg-brand-canvas-dark p-8 text-brand-on-dark text-center relative overflow-hidden">
                 <div class="absolute inset-x-0 top-0 h-1 bg-brand-gradient"></div>
                 <span class="eyebrow text-brand-on-dark/70">Étape 1</span>
@@ -18,27 +18,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">Vos coordonnées</h3>
-                            {{ form_row(requestForm.clientName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.clientEmail, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.clientName, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.clientEmail, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                         </div>
                         <div class="space-y-4">
                             <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">L'ancêtre recherché</h3>
-                            {{ form_row(requestForm.ancestorFirstName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.ancestorLastName, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.ancestorFirstName, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.ancestorLastName, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                         </div>
                     </div>
 
                     <div class="mt-8 space-y-6">
                         <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">Détails et indices</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {{ form_row(requestForm.estimatedBirthDate, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.estimatedBirthPlace, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.estimatedDeathDate, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.estimatedDeathPlace, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedBirthDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedBirthPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedDeathDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            {{ form_row(requestForm.estimatedDeathPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                         </div>
-                        {{ form_row(requestForm.researchGoals, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
-                        {{ form_row(requestForm.additionalInfo, {'attr': {'class': 'w-full p-3 rounded-sm border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
-                        {{ form_row(requestForm.documents, {'attr': {'class': 'w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-sm file:border-0 file:bg-brand-primary file:text-brand-on-primary file:font-mono file:uppercase file:text-[11px] file:tracking-mono-wide file:cursor-pointer'}}) }}
+                        {{ form_row(requestForm.researchGoals, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
+                        {{ form_row(requestForm.additionalInfo, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
+                        {{ form_row(requestForm.documents, {'attr': {'class': 'w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-2xl file:border-0 file:bg-brand-primary file:text-brand-on-primary file:font-mono file:uppercase file:text-[11px] file:tracking-mono-wide file:cursor-pointer'}}) }}
                     </div>
 
                     <div class="mt-10 text-center">

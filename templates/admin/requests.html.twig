@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="bg-brand-canvas shadow-none rounded-sm overflow-hidden border border-brand-hairline">
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-brand-hairline text-brand-body">
                     <tr class="border-b border-brand-hairline">
@@ -43,17 +43,17 @@
                             </td>
                             <td class="px-6 py-4">
                                 {% if request.status == 'pending' %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En attente</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En attente</span>
                                 {% elseif request.status == 'in_progress' %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-surface-dark-soft text-brand-on-dark text-[11px] font-mono uppercase tracking-mono-wide">En cours</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-orange/25 text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En cours</span>
                                 {% elseif request.status == 'completed' %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-mint text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Terminé</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-periwinkle/35 text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Terminé</span>
                                 {% else %}
-                                    <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">{{ request.status }}</span>
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">{{ request.status }}</span>
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <a href="{{ path('app_admin_request_show', {'id': request.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Détails</a>
+                                <a href="{{ path('app_admin_request_show', {'id': request.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Détails</a>
                             </td>
                         </tr>
                     {% else %}

@@ -8,7 +8,7 @@
         <div class="flex justify-between items-center mb-8">
             <a href="{{ path('app_client_space') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à mon espace</a>
             <div class="flex items-center gap-6">
-                <span class="px-2 py-1 rounded-sm bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">
+                <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">
                     {% if request.status == 'pending' %}En attente
                     {% elseif request.status == 'in_progress' %}En cours
                     {% elseif request.status == 'completed' %}Terminé
@@ -19,7 +19,7 @@
 
         <div class="space-y-8">
             <!-- Informations sur l'Ancêtre -->
-            <div class="bg-brand-canvas p-8 rounded-sm shadow-none border border-brand-hairline">
+            <div class="bg-brand-canvas p-8 rounded-2xl shadow-none border border-brand-hairline">
                 <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-6 border-b border-brand-hairline pb-4">Informations sur l'Ancêtre</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="mt-8">
                     <label class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body mb-2">Objectifs de recherche</label>
-                    <div class="text-brand-ink bg-brand-canvas p-4 rounded-sm border border-brand-hairline text-sm leading-relaxed">
+                    <div class="text-brand-ink bg-brand-canvas p-4 rounded-2xl border border-brand-hairline text-sm leading-relaxed">
                         {{ request.researchGoals ?: 'Aucun objectif spécifique précisé.' }}
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             {% set client_docs = request.documents|filter(d => d.category == 'client') %}
 
             <!-- Documents trouvés par le généalogiste -->
-            <div class="bg-brand-canvas p-8 rounded-sm shadow-none border border-brand-hairline">
+            <div class="bg-brand-canvas p-8 rounded-2xl shadow-none border border-brand-hairline">
                 <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-6 border-b border-brand-hairline pb-4">Documents trouvés par le généalogiste</h2>
 
                 {% if research_docs is not empty %}
@@ -84,14 +84,14 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <div class="text-center py-10 bg-brand-canvas rounded-sm border-2 border-dashed border-brand-hairline">
+                    <div class="text-center py-10 bg-brand-canvas rounded-2xl border-2 border-dashed border-brand-hairline">
                         <p class="text-brand-body text-sm">Le généalogiste n'a pas encore partagé de document pour cette demande.</p>
                     </div>
                 {% endif %}
             </div>
 
             <!-- Mes pièces déposées -->
-            <div class="bg-brand-canvas p-8 rounded-sm shadow-none border border-brand-hairline">
+            <div class="bg-brand-canvas p-8 rounded-2xl shadow-none border border-brand-hairline">
                 <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-6 border-b border-brand-hairline pb-4">Mes pièces déposées</h2>
                 {% if client_docs is not empty %}
                     <ul class="divide-y divide-brand-hairline">
@@ -106,7 +106,7 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <div class="text-center py-10 bg-brand-canvas rounded-sm border-2 border-dashed border-brand-hairline">
+                    <div class="text-center py-10 bg-brand-canvas rounded-2xl border-2 border-dashed border-brand-hairline">
                         <p class="text-brand-body text-sm">Vous n'avez déposé aucune pièce pour cette demande.</p>
                     </div>
                 {% endif %}

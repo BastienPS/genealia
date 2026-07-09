@@ -3,16 +3,16 @@
    - Messages client : bulle à gauche, fond brand-hairline.
    Le contenu est rendu en autoescape Twig (pas de |raw) — sûr contre le XSS. #}
 {% if messages is empty %}
-    <div class="text-center py-10 bg-brand-canvas rounded-sm border-2 border-dashed border-brand-hairline">
+    <div class="text-center py-10 bg-brand-canvas rounded-2xl border-2 border-dashed border-brand-hairline">
         <p class="text-brand-body text-sm">Aucun message pour le moment.</p>
     </div>
 {% else %}
     <div class="space-y-5">
         {% for message in messages %}
             <div class="flex {% if message.isFromAdmin %}justify-end{% else %}justify-start{% endif %}">
-                <div class="max-w-[80%] {% if message.isFromAdmin %}bg-brand-primary text-brand-on-primary ml-auto{% else %}bg-brand-hairline text-brand-ink mr-auto{% endif %} px-4 py-3 rounded-sm text-sm leading-relaxed">
+                <div class="max-w-[80%] {% if message.isFromAdmin %}bg-brand-primary text-brand-on-primary ml-auto{% else %}bg-brand-hairline text-brand-ink mr-auto{% endif %} px-4 py-3 rounded-2xl text-sm leading-relaxed">
                     <div class="whitespace-pre-wrap break-words">{{ message.content }}</div>
-                    <div class="mt-2 text-[11px] font-mono uppercase tracking-mono-wide {% if message.isFromAdmin %}text-brand-on-dark/70{% else %}text-brand-body{% endif %}">
+                    <div class="mt-2 text-[11px] font-mono uppercase tracking-mono-wide {% if message.isFromAdmin %}text-brand-on-primary/70{% else %}text-brand-body{% endif %}">
                         {{ message.authorLabel ?: (message.isFromAdmin ? 'Généalia' : 'Descendant') }} · {{ message.createdAt|date('d/m/Y H:i') }}
                     </div>
                 </div>

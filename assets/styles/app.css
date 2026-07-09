@@ -3,22 +3,22 @@
 /* Scan Twig templates for class usage (v4 native content source). */
 @source "../../templates";
 
-/* ───────────────────────── Brand design tokens (DESIGN.md, Together-AI kit) ───────────────────────── */
+/* ───────────────────────── Brand design tokens — « Héritage chaud » (pastel, tout clair) ───────────────────────── */
 @theme {
-  /* Colors */
-  --color-brand-primary: #000000;
-  --color-brand-on-primary: #ffffff;
-  --color-brand-ink: #000000;
-  --color-brand-body: #959494;
-  --color-brand-hairline: #ebebeb;
-  --color-brand-canvas: #ffffff;
-  --color-brand-canvas-dark: #010120;
-  --color-brand-surface-dark-soft: #313641;
-  --color-brand-on-dark: #ffffff;
-  --color-brand-orange: #fc4c02;
-  --color-brand-magenta: #ef2cc1;
-  --color-brand-periwinkle: #bdbbff;
-  --color-brand-mint: #c8f6f9;
+  /* Colors — warm cream canvas, taupe ink, dusty-rose / sage / terracotta accents */
+  --color-brand-primary: #3D3530;            /* solid button/badge fill (was pure black) — warm dark taupe */
+  --color-brand-on-primary: #FBF8F4;         /* text on primary (was #fff) — cream */
+  --color-brand-ink: #4A4239;                /* primary text (was #000) — taupe */
+  --color-brand-body: #7A7268;               /* muted text (was #959494) — warm gray */
+  --color-brand-hairline: #E8E0D6;           /* hairlines/borders (was #ebebeb) — cream */
+  --color-brand-canvas: #FAF6F0;             /* page canvas (was #fff) — warm cream */
+  --color-brand-canvas-dark: #F3DEDE;        /* REPURPOSED (was #010120): warm tinted surface — pale dusty rose */
+  --color-brand-surface-dark-soft: #E8E0D6;  /* REPURPOSED (was #313641): soft border — cream */
+  --color-brand-on-dark: #4A4239;            /* REPURPOSED (was #fff): text on ex-dark surfaces — taupe */
+  --color-brand-orange: #E0A988;             /* terracotta (was #fc4c02) */
+  --color-brand-magenta: #E8C5C5;            /* dusty rose (was #ef2cc1) */
+  --color-brand-periwinkle: #C2D2BE;         /* sage (was #bdbbff) */
+  --color-brand-mint: #DDE7D6;               /* pale sage fill (was #c8f6f9) */
 
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;
@@ -29,11 +29,11 @@
   --tracking-tight: -0.01em;
   --tracking-mono-wide: 0.04em;
 
-  /* Background images — the three-stop brand gradient (orange → magenta → periwinkle) */
-  --background-image-brand-gradient: linear-gradient(90deg, #fc4c02 0%, #ef2cc1 50%, #bdbbff 100%);
+  /* Background images — three-stop brand gradient, pastel (terracotta → rose → sage) */
+  --background-image-brand-gradient: linear-gradient(90deg, #E0A988 0%, #E8C5C5 50%, #C2D2BE 100%);
 
-  /* Shadows */
-  --shadow-brand-glow: 0 8px 30px rgba(239, 44, 193, 0.35);
+  /* Shadows — soft warm glow (was sharp magenta glow) */
+  --shadow-brand-glow: 0 10px 40px rgba(224, 169, 136, 0.22);
 
   /* Animations */
   --animate-blob: blob-drift 18s ease-in-out infinite;
@@ -79,10 +79,10 @@
     @apply font-mono uppercase text-xs tracking-mono-wide text-brand-body;
   }
 
-  /* Primary CTA — brand gradient fill, big, glowing hover */
+  /* Primary CTA — brand gradient fill, big, glowing hover. Ink text for contrast on the pastel gradient. */
   .btn-cta {
     @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
-           px-10 py-4 rounded-sm text-white bg-brand-gradient
+           px-10 py-4 rounded-full text-brand-ink bg-brand-gradient
            transition duration-300 hover:-translate-y-0.5 hover:shadow-brand-glow
            focus:outline-none focus:ring-2 focus:ring-brand-magenta/40;
   }
@@ -90,36 +90,36 @@
   /* Compact variant for nav bars */
   .btn-cta-sm {
     @apply inline-flex items-center justify-center font-mono uppercase text-xs tracking-mono-wide font-medium
-           px-5 py-2.5 rounded-sm text-white bg-brand-gradient
+           px-5 py-2.5 rounded-full text-brand-ink bg-brand-gradient
            transition duration-300 hover:-translate-y-0.5 hover:shadow-brand-glow;
   }
 
-  /* Secondary — mint fill, ink text */
+  /* Secondary — pale-sage fill, ink text */
   .btn-mint {
     @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
-           px-10 py-4 rounded-sm text-brand-ink bg-brand-mint
+           px-10 py-4 rounded-full text-brand-ink bg-brand-mint
            transition duration-300 hover:-translate-y-0.5 hover:shadow-lg;
   }
 
   /* Outline — hairline border on light surfaces */
   .btn-outline {
     @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
-           px-10 py-4 rounded-sm text-brand-ink border border-brand-hairline bg-brand-canvas
+           px-10 py-4 rounded-full text-brand-ink border border-brand-hairline bg-brand-canvas
            transition duration-300 hover:border-brand-ink;
   }
 
-  /* Outline on dark surfaces */
+  /* Outline on dark surfaces (now light surfaces — kept for compatibility) */
   .btn-outline-dark {
     @apply inline-flex items-center justify-center font-mono uppercase text-sm tracking-mono-wide font-medium
-           px-10 py-4 rounded-sm text-brand-on-dark border border-brand-surface-dark-soft
+           px-10 py-4 rounded-full text-brand-on-dark border border-brand-surface-dark-soft
            transition duration-300 hover:border-brand-on-dark;
   }
 
-  /* Classic black pill */
+  /* Solid pill — warm taupe (was black) */
   .btn-dark {
     @apply inline-flex items-center justify-center font-mono uppercase text-xs tracking-mono-wide font-medium
-           px-6 py-2.5 rounded-sm text-brand-on-primary bg-brand-primary
-           transition duration-300 hover:bg-stone-800;
+           px-6 py-2.5 rounded-full text-brand-on-primary bg-brand-primary
+           transition duration-300 hover:bg-stone-700;
   }
 
   /* Gradient clip for headline accent words */
