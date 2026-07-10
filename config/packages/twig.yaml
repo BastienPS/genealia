@@ -1,5 +1,8 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        # Lien de don PayPal (valeur réelle dans .env.local).
+        paypal_donate_url: '%env(resolve:PAYPAL_DONATE_URL)%'
 
 when@test:
     twig:
