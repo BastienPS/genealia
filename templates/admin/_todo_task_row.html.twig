@@ -1,0 +1,24 @@
+{# Ligne d'une tâche — rendu initial ET fragment retourné par app_admin_todotask_new (AJAX).
+   Le contrôleur Stimulus `todolist` lit les data-* pour toggle/delete, et gère le drag. #}
+<tr class="hover:bg-stone-50 transition duration-150 {% if task.done %}opacity-60{% endif %}"
+    data-todolist-target="task"
+    data-id="{{ task.id }}"
+    data-toggle-url="{{ path('app_admin_todotask_toggle', {'id': task.id}) }}"
+    data-delete-url="{{ path('app_admin_todotask_delete', {'id': task.id}) }}"
+    data-toggle-csrf="{{ csrf_token('toggle' ~ task.id) }}"
+    data-delete-csrf="{{ csrf_token('delete' ~ task.id) }}"
+    draggable="true"
+    data-action="dragstart->todolist#dragstart dragover->todolist#dragover drop->todolist#drop dragend->todolist#dragend">
+    <td class="px-3 py-4 text-center cursor-grab select-none text-brand-body" title="Glisser pour réordonner">⋮</td>
+    <td class="px-6 py-4">
+        <span class="js-task-label text-brand-ink {% if task.done %}line-through text-brand-body{% endif %}">{{ task.label }}</span>
+    </td>
+    <td class="px-6 py-4 text-right">
+        <div class="inline-flex items-center gap-2">
+            <button type="button" data-action="click->todolist#toggleDone"
+                class="js-toggle-btn inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink {% if task.done %}text-brand-mint{% else %}text-brand-ink{% endif %}">{{ task.done ? 'Annuler' : 'Fait' }}</button>
+            <button type="button" data-action="click->todolist#deleteTask"
+                class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-magenta hover:text-brand-magenta">Suppr</button>
+        </div>
+    </td>
+</tr>
