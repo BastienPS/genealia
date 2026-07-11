@@ -38,7 +38,7 @@
                     {% if app.user %}
                         <span class="text-brand-on-dark text-sm hidden sm:inline">Bonjour {{ app.user.userIdentifier }}</span>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_admin_ancestors') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Ancêtres</a>
+                            <a href="{{ path('app_admin_clients') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Clients</a>
                             <a href="{{ path('app_admin_messages') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Messagerie</a>
                         {% else %}
                             <a href="{{ path('app_client_space') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Mon espace</a>

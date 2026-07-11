@@ -48,11 +48,21 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/ancestors', name: 'app_admin_ancestors')]
-    public function listAncestors(AncestorRepository $ancestorRepository): Response
+    /**
+     * Ancêtres créés par un client donné. 404 si le client n'existe pas.
+     * Vue lecture seule côté admin (le CRUD reste côté client dans /espace).
+     */
+    #[Route('/clients/{clientId}/ancetres', name: 'app_admin_client_ancestors', requirements: ['clientId' => '\d+'], methods: ['GET'])]
+    public function clientAncestors(int $clientId, EntityManagerInterface $entityManager, AncestorRepository $ancestorRepository): Response
     {
-        return $this->render('admin/ancestors.html.twig', [
-            'ancestors' => $ancestorRepository->findAllWithClientOrdered(),
+        $client = $entityManager->getRepository(User::class)->find($clientId);
+        if ($client === null) {
+            throw $this->createNotFoundException('Client introuvable');
+        }
+
+        return $this->render('admin/client_ancestors.html.twig', [
+            'client' => $client,
+            'ancestors' => $ancestorRepository->findByClient($client),
         ]);
     }
 
