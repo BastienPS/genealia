@@ -31,7 +31,7 @@
                 </a>
                 <div class="hidden md:flex items-center gap-8 text-brand-on-dark font-normal">
                     <a href="{{ path('app_home') }}" class="hover:opacity-80 transition duration-300 text-sm">Accueil</a>
-                    <a href="#how-it-works" class="hover:opacity-80 transition duration-300 text-sm">Comment ça marche ?</a>
+                    <a href="{{ path('app_home') }}#how-it-works" class="hover:opacity-80 transition duration-300 text-sm">Comment ça marche ?</a>
                     <a href="{{ path('app_legal_apropos') }}" class="hover:opacity-80 transition duration-300 text-sm">À propos</a>
                 </div>
                 <div class="flex items-center gap-4">
@@ -74,7 +74,7 @@
                     <h4 class="eyebrow mb-4">Service</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="{{ path('app_home') }}" class="hover:text-brand-primary transition">Accueil</a></li>
-                        <li><a href="#how-it-works" class="hover:text-brand-primary transition">Comment ça marche ?</a></li>
+                        <li><a href="{{ path('app_home') }}#how-it-works" class="hover:text-brand-primary transition">Comment ça marche ?</a></li>
                         <li><a href="{{ path('app_request_new') }}" class="hover:text-brand-primary transition">Déposer une demande</a></li>
                     </ul>
                 </div>
