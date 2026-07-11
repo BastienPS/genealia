@@ -5,6 +5,12 @@
 ###############################################################################
 FROM node:22-alpine AS assets
 WORKDIR /app
+# @symfony/ux-turbo is a "file:vendor/symfony/ux-turbo/assets" dependency, so it
+# only exists after `composer install` (Stage 2). The build context on the server
+# has no vendor/ (composer runs inside the image), so pull the assets from the
+# composer_builder stage BEFORE npm ci — otherwise npm run build fails with
+# "The file @symfony/ux-turbo/package.json could not be found".
+COPY --from=composer_builder /app/vendor/symfony/ux-turbo/assets /app/vendor/symfony/ux-turbo/assets
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
