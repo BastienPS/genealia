@@ -22,6 +22,11 @@ Encore
      */
     .addEntry('app', './assets/app.js')
 
+    // Stimulus bridge expects controllers.json at this virtual path.
+    .addAliases({
+        '@symfony/stimulus-bridge/controllers.json': new URL('./assets/controllers.json', import.meta.url).pathname,
+    })
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 

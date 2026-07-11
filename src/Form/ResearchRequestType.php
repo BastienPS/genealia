@@ -54,8 +54,15 @@ class ResearchRequestType extends AbstractType
             ])
             ->add('estimatedBirthPlace', TextType::class, [
                 'label' => 'Lieu de naissance approximatif',
-                'attr' => ['placeholder' => 'Lyon, Rhône'],
+                'attr' => [
+                    'placeholder' => 'Lyon, Rhône',
+                    'data-action' => 'input->commune-autocomplete#search keydown->commune-autocomplete#navigate',
+                    'data-commune-autocomplete-target' => 'input',
+                ],
                 'required' => false,
+            ])
+            ->add('estimatedBirthCountry', FrenchCountryType::class, [
+                'label' => 'Pays de naissance',
             ])
             ->add('estimatedDeathDate', TextType::class, [
                 'label' => 'Date de décès approximative',
@@ -64,8 +71,15 @@ class ResearchRequestType extends AbstractType
             ])
             ->add('estimatedDeathPlace', TextType::class, [
                 'label' => 'Lieu de décès approximatif',
-                'attr' => ['placeholder' => 'Paris, Seine'],
+                'attr' => [
+                    'placeholder' => 'Paris, Seine',
+                    'data-action' => 'input->commune-autocomplete#search keydown->commune-autocomplete#navigate',
+                    'data-commune-autocomplete-target' => 'input',
+                ],
                 'required' => false,
+            ])
+            ->add('estimatedDeathCountry', FrenchCountryType::class, [
+                'label' => 'Pays de décès',
             ])
             ->add('researchGoals', TextareaType::class, [
                 'label' => 'Que souhaitez-vous découvrir précisément ?',

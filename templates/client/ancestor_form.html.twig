@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ edit_mode ? 'Modifier un ancêtre' : 'Ajouter un ancêtre' }} - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
+            <div class="bg-brand-canvas-dark p-8 text-brand-on-dark text-center relative overflow-hidden">
+                <div class="absolute inset-x-0 top-0 h-1 bg-brand-gradient"></div>
+                <span class="eyebrow text-brand-on-dark/70">{{ edit_mode ? 'Édition' : 'Nouvel ancêtre' }}</span>
+                <h1 class="text-3xl font-medium tracking-tight mt-3 mb-2">{{ edit_mode ? 'Modifier cet ancêtre' : 'Ajouter un ancêtre' }}</h1>
+                <p class="text-brand-on-dark/70 text-sm">Renseignez les informations dont vous disposez. Les dates et lieux incomplets peuvent rester vides.</p>
+            </div>
+
+            <div class="p-8">
+                {{ form_start(form) }}
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-6">Identité</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    {{ form_label(form.gender, null, {'label_attr': {'class': 'block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body mb-2'}}) }}
+                                    <div class="flex gap-6">
+                                        {% for choice in form.gender %}
+                                            <label class="inline-flex items-center gap-2 text-sm text-brand-ink cursor-pointer">
+                                                {{ form_widget(choice, {'attr': {'class': 'accent-brand-primary'}}) }}
+                                                <span>{{ choice.vars.label }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                    {{ form_errors(form.gender) }}
+                                </div>
+                                <div class="md:col-span-1"></div>
+                                {{ form_row(form.firstName, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                {{ form_row(form.lastName, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-6">Naissance</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {{ form_row(form.birthDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                <div class="relative" data-controller="commune-autocomplete"
+                                     data-commune-autocomplete-country-target-value="#ancestor_birthCountry">
+                                    {{ form_label(form.birthPlace) }}
+                                    {{ form_widget(form.birthPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                    {{ form_errors(form.birthPlace) }}
+                                    <ul data-commune-autocomplete-target="results"
+                                        class="hidden absolute z-10 left-0 right-0 mt-1 bg-brand-canvas border border-brand-hairline rounded-2xl shadow-lg max-h-60 overflow-auto divide-y divide-brand-hairline"></ul>
+                                </div>
+                                {{ form_row(form.birthCountry, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-6">Décès</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {{ form_row(form.deathDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                <div class="relative" data-controller="commune-autocomplete"
+                                     data-commune-autocomplete-country-target-value="#ancestor_deathCountry">
+                                    {{ form_label(form.deathPlace) }}
+                                    {{ form_widget(form.deathPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                    {{ form_errors(form.deathPlace) }}
+                                    <ul data-commune-autocomplete-target="results"
+                                        class="hidden absolute z-10 left-0 right-0 mt-1 bg-brand-canvas border border-brand-hairline rounded-2xl shadow-lg max-h-60 overflow-auto divide-y divide-brand-hairline"></ul>
+                                </div>
+                                {{ form_row(form.deathCountry, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-6">Mariage</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {{ form_row(form.marriageDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                <div class="relative" data-controller="commune-autocomplete"
+                                     data-commune-autocomplete-country-target-value="#ancestor_marriageCountry">
+                                    {{ form_label(form.marriagePlace) }}
+                                    {{ form_widget(form.marriagePlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                    {{ form_errors(form.marriagePlace) }}
+                                    <ul data-commune-autocomplete-target="results"
+                                        class="hidden absolute z-10 left-0 right-0 mt-1 bg-brand-canvas border border-brand-hairline rounded-2xl shadow-lg max-h-60 overflow-auto divide-y divide-brand-hairline"></ul>
+                                </div>
+                                {{ form_row(form.marriageCountry, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 text-center">
+                        <button type="submit" class="btn-cta">{{ edit_mode ? 'Enregistrer les modifications' : 'Ajouter cet ancêtre' }}</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <a href="{{ path('app_client_ancestors') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à mes ancêtres</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

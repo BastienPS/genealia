@@ -3,6 +3,10 @@
 /* Scan Twig templates for class usage (v4 native content source). */
 @source "../../templates";
 
+/* Scan Stimulus controllers: utility classes built in JS strings (dropdown
+   d'autocomplétion communes) doivent être compilées par Tailwind. */
+@source "../controllers";
+
 /* ───────────────────────── Brand design tokens — « Héritage chaud » (pastel, tout clair) ───────────────────────── */
 @theme {
   /* Colors — warm cream canvas, taupe ink, dusty-rose / sage / terracotta accents */

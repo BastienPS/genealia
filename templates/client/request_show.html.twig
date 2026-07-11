@@ -32,7 +32,7 @@
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Lieu de naissance</label>
-                        <div class="text-brand-ink">{{ request.estimatedBirthPlace ?: 'Non précisé' }}</div>
+                        <div class="text-brand-ink">{{ [request.estimatedBirthPlace, request.estimatedBirthCountry ? request.estimatedBirthCountry|country_name : null]|filter(v => v)|join(' · ') ?: 'Non précisé' }}</div>
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Date de décès</label>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Lieu de décès</label>
-                        <div class="text-brand-ink">{{ request.estimatedDeathPlace ?: 'Non précisé' }}</div>
+                        <div class="text-brand-ink">{{ [request.estimatedDeathPlace, request.estimatedDeathCountry ? request.estimatedDeathCountry|country_name : null]|filter(v => v)|join(' · ') ?: 'Non précisé' }}</div>
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[10px] font-mono uppercase tracking-mono-wide text-brand-body">Déposée le</label>

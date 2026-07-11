@@ -34,11 +34,17 @@ class ResearchRequest
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $estimatedBirthPlace = null;
 
+    #[ORM\Column(length: 2, nullable: true)]
+    private ?string $estimatedBirthCountry = null; // code ISO 2 lettres (FR, IT, …)
+
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $estimatedDeathDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $estimatedDeathPlace = null;
+
+    #[ORM\Column(length: 2, nullable: true)]
+    private ?string $estimatedDeathCountry = null; // code ISO 2 lettres (FR, IT, …)
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $researchGoals = null;
@@ -136,6 +142,17 @@ class ResearchRequest
         return $this;
     }
 
+    public function getEstimatedBirthCountry(): ?string
+    {
+        return $this->estimatedBirthCountry;
+    }
+
+    public function setEstimatedBirthCountry(?string $estimatedBirthCountry): static
+    {
+        $this->estimatedBirthCountry = $estimatedBirthCountry;
+        return $this;
+    }
+
     public function getEstimatedDeathDate(): ?string
     {
         return $this->estimatedDeathDate;
@@ -155,6 +172,17 @@ class ResearchRequest
     public function setEstimatedDeathPlace(?string $estimatedDeathPlace): static
     {
         $this->estimatedDeathPlace = $estimatedDeathPlace;
+        return $this;
+    }
+
+    public function getEstimatedDeathCountry(): ?string
+    {
+        return $this->estimatedDeathCountry;
+    }
+
+    public function setEstimatedDeathCountry(?string $estimatedDeathCountry): static
+    {
+        $this->estimatedDeathCountry = $estimatedDeathCountry;
         return $this;
     }
 

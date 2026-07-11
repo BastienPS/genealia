@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes ancêtres - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Espace des descendants</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Mes ancêtres</h1>
+            </div>
+            <div class="flex items-center gap-6">
+                {% if app.user %}
+                    <span class="text-brand-body text-sm hidden sm:inline">Bonjour <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
+                {% endif %}
+                <a href="{{ path('app_client_ancestor_new') }}" class="btn-cta-sm">Ajouter un ancêtre</a>
+            </div>
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-6 rounded-2xl border px-6 py-4 text-sm
+                    {% if label == 'success' %}border-brand-mint/40 bg-brand-mint/15 text-brand-ink
+                    {% else %}border-brand-orange/40 bg-brand-orange/15 text-brand-ink{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-brand-hairline text-brand-body">
+                    <tr class="border-b border-brand-hairline">
+                        <th class="eyebrow px-6 py-4">Nom</th>
+                        <th class="eyebrow px-6 py-4">Sexe</th>
+                        <th class="eyebrow px-6 py-4">Naissance</th>
+                        <th class="eyebrow px-6 py-4">Décès</th>
+                        <th class="eyebrow px-6 py-4">Mariage</th>
+                        <th class="eyebrow px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-brand-hairline">
+                    {% for ancestor in ancestors %}
+                        <tr class="hover:bg-stone-50 transition duration-150">
+                            <td class="px-6 py-4">
+                                <div class="text-brand-ink font-medium">{{ ancestor.firstName }} {{ ancestor.lastName }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">{{ ancestor.genderLabel }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.birthDate ? ancestor.birthDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.birthPlace or ancestor.birthCountry %}<div>{{ [ancestor.birthPlace, ancestor.birthCountry ? ancestor.birthCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.deathDate ? ancestor.deathDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.deathPlace or ancestor.deathCountry %}<div>{{ [ancestor.deathPlace, ancestor.deathCountry ? ancestor.deathCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.marriageDate ? ancestor.marriageDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.marriagePlace or ancestor.marriageCountry %}<div>{{ [ancestor.marriagePlace, ancestor.marriageCountry ? ancestor.marriageCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="inline-flex items-center gap-2">
+                                    <a href="{{ path('app_client_ancestor_edit', {'id': ancestor.id}) }}" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">Modifier</a>
+                                    <form method="post" action="{{ path('app_client_ancestor_delete', {'id': ancestor.id}) }}" onsubmit="return confirm('Supprimer cet ancêtre ? Cette action est définitive.');" class="inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ancestor.id) }}">
+                                        <button type="submit" class="inline-flex items-center font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-magenta hover:text-brand-magenta">Supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="bg-brand-canvas">
+                            <td colspan="6" class="px-6 py-12 text-center">
+                                <div class="border-2 border-dashed border-brand-hairline rounded-2xl py-10 px-6">
+                                    <p class="text-brand-body text-sm mb-6">Vous n'avez encore ajouté aucun ancêtre à votre espace.</p>
+                                    <a href="{{ path('app_client_ancestor_new') }}" class="btn-cta">Ajouter un ancêtre</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8">
+            <a href="{{ path('app_client_space') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour à mon espace</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

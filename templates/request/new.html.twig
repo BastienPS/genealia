@@ -30,11 +30,27 @@
 
                     <div class="mt-8 space-y-6">
                         <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body border-b border-brand-hairline pb-2 mb-4">Détails et indices</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {{ form_row(requestForm.estimatedBirthDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.estimatedBirthPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            <div class="relative" data-controller="commune-autocomplete"
+                                 data-commune-autocomplete-country-target-value="#research_request_estimatedBirthCountry">
+                                {{ form_label(requestForm.estimatedBirthPlace) }}
+                                {{ form_widget(requestForm.estimatedBirthPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                {{ form_errors(requestForm.estimatedBirthPlace) }}
+                                <ul data-commune-autocomplete-target="results"
+                                    class="hidden absolute z-10 left-0 right-0 mt-1 bg-brand-canvas border border-brand-hairline rounded-2xl shadow-lg max-h-60 overflow-auto divide-y divide-brand-hairline"></ul>
+                            </div>
+                            {{ form_row(requestForm.estimatedBirthCountry, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                             {{ form_row(requestForm.estimatedDeathDate, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
-                            {{ form_row(requestForm.estimatedDeathPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                            <div class="relative" data-controller="commune-autocomplete"
+                                 data-commune-autocomplete-country-target-value="#research_request_estimatedDeathCountry">
+                                {{ form_label(requestForm.estimatedDeathPlace) }}
+                                {{ form_widget(requestForm.estimatedDeathPlace, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
+                                {{ form_errors(requestForm.estimatedDeathPlace) }}
+                                <ul data-commune-autocomplete-target="results"
+                                    class="hidden absolute z-10 left-0 right-0 mt-1 bg-brand-canvas border border-brand-hairline rounded-2xl shadow-lg max-h-60 overflow-auto divide-y divide-brand-hairline"></ul>
+                            </div>
+                            {{ form_row(requestForm.estimatedDeathCountry, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm'}}) }}
                         </div>
                         {{ form_row(requestForm.researchGoals, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}
                         {{ form_row(requestForm.additionalInfo, {'attr': {'class': 'w-full p-3 rounded-2xl border border-brand-hairline focus:ring-1 focus:ring-brand-primary outline-none text-sm h-32'}}) }}

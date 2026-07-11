@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Ancestor;
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\ResearchDocument;
 use App\Entity\ResearchRequest;
 use App\Entity\User;
+use App\Form\AncestorType;
 use App\Form\MessageType;
+use App\Repository\AncestorRepository;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
 use App\Repository\ResearchRequestRepository;
@@ -165,6 +168,123 @@ class ClientController extends AbstractController
         $conversation = $conversationRepository->findOrCreateForClient($client);
 
         return $this->renderMessagesPage($conversation, $messageRepository, $form);
+    }
+
+    /**
+     * « Mes ancêtres » : liste des ancêtres déclarés par le client, triés par
+     * nom de famille. Lecture seule ; la création/modification se fait via les
+     * routes dédiées ci-dessous.
+     */
+    #[Route('/ancetres', name: 'app_client_ancestors')]
+    public function ancestors(AncestorRepository $ancestorRepository): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            // L'admin en mémoire n'est pas un client : on le renvoie vers son
+            // propre espace, comme pour le tableau de bord.
+            return $this->redirectToRoute('app_admin_requests');
+        }
+
+        return $this->render('client/ancestors.html.twig', [
+            'ancestors' => $ancestorRepository->findByClient($client),
+        ]);
+    }
+
+    /**
+     * Création d'un ancêtre par le client. Le rattachement au compte se fait
+     * côté serveur (setClient) — l'utilisateur ne peut pas forcer un autre
+     * propriétaire. PRG en cas de succès.
+     */
+    #[Route('/ancetres/nouveau', name: 'app_client_ancestor_new', methods: ['GET', 'POST'])]
+    public function ancestorNew(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ancestor = new Ancestor();
+        $form = $this->createForm(AncestorType::class, $ancestor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ancestor->setClient($client);
+            $entityManager->persist($ancestor);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ancêtre ajouté à votre espace.');
+
+            return $this->redirectToRoute('app_client_ancestors');
+        }
+
+        return $this->render('client/ancestor_form.html.twig', [
+            'form' => $form->createView(),
+            'edit_mode' => false,
+        ]);
+    }
+
+    /**
+     * Modification d'un ancêtre du client. L'appartenance est garantie par
+     * findOneByClientAndId() — un ancêtre d'autrui renvoie null → 404 (IDOR).
+     */
+    #[Route('/ancetres/{id}/modifier', name: 'app_client_ancestor_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function ancestorEdit(int $id, Request $request, AncestorRepository $ancestorRepository, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ancestor = $ancestorRepository->findOneByClientAndId($client, $id);
+        if ($ancestor === null) {
+            throw $this->createNotFoundException('Ancêtre non trouvé');
+        }
+
+        $form = $this->createForm(AncestorType::class, $ancestor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ancêtre mis à jour.');
+
+            return $this->redirectToRoute('app_client_ancestors');
+        }
+
+        return $this->render('client/ancestor_form.html.twig', [
+            'form' => $form->createView(),
+            'edit_mode' => true,
+            'ancestor' => $ancestor,
+        ]);
+    }
+
+    /**
+     * Suppression d'un ancêtre du client. Vérification CSRF + IDOR ; la
+     * route n'accepte que POST.
+     */
+    #[Route('/ancetres/{id}/supprimer', name: 'app_client_ancestor_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function ancestorDelete(int $id, Request $request, AncestorRepository $ancestorRepository, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ancestor = $ancestorRepository->findOneByClientAndId($client, $id);
+        if ($ancestor === null) {
+            throw $this->createNotFoundException('Ancêtre non trouvé');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete' . $ancestor->getId(), $token)) {
+            $entityManager->remove($ancestor);
+            $entityManager->flush();
+            $this->addFlash('success', 'Ancêtre supprimé.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide, suppression annulée.');
+        }
+
+        return $this->redirectToRoute('app_client_ancestors');
     }
 
     /**
