@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ancêtres des clients - Admin - Généalia{% endblock %}
+
+{% block body %}
+<div class="bg-brand-canvas py-12 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div>
+                <p class="eyebrow text-brand-body mb-2">Administration</p>
+                <h1 class="text-3xl font-medium tracking-tight text-brand-ink">Ancêtres des clients</h1>
+            </div>
+            <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Retour aux demandes</a>
+        </div>
+
+        <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-brand-hairline text-brand-body">
+                    <tr class="border-b border-brand-hairline">
+                        <th class="eyebrow px-6 py-4">Client</th>
+                        <th class="eyebrow px-6 py-4">Nom</th>
+                        <th class="eyebrow px-6 py-4">Sexe</th>
+                        <th class="eyebrow px-6 py-4">Naissance</th>
+                        <th class="eyebrow px-6 py-4">Décès</th>
+                        <th class="eyebrow px-6 py-4">Mariage</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-brand-hairline">
+                    {% for ancestor in ancestors %}
+                        <tr class="hover:bg-stone-50 transition duration-150">
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-brand-ink">{{ ancestor.client ? (ancestor.client.displayName ?: ancestor.client.email) : '—' }}</div>
+                                {% if ancestor.client %}<div class="text-xs text-brand-body">{{ ancestor.client.email }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-brand-ink font-medium">{{ ancestor.firstName }} {{ ancestor.lastName }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">{{ ancestor.genderLabel }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.birthDate ? ancestor.birthDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.birthPlace or ancestor.birthCountry %}<div>{{ [ancestor.birthPlace, ancestor.birthCountry ? ancestor.birthCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.deathDate ? ancestor.deathDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.deathPlace or ancestor.deathCountry %}<div>{{ [ancestor.deathPlace, ancestor.deathCountry ? ancestor.deathCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-brand-body text-xs">
+                                <div class="text-brand-ink">{{ ancestor.marriageDate ? ancestor.marriageDate|date('d/m/Y') : '—' }}</div>
+                                {% if ancestor.marriagePlace or ancestor.marriageCountry %}<div>{{ [ancestor.marriagePlace, ancestor.marriageCountry ? ancestor.marriageCountry|country_name : null]|filter(v => v)|join(' · ') }}</div>{% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="bg-brand-canvas">
+                            <td colspan="6" class="px-6 py-12 text-center">
+                                <div class="border-2 border-dashed border-brand-hairline rounded-2xl py-10 px-6">
+                                    <p class="text-brand-body text-sm">Aucun ancêtre n'a encore été ajouté par les clients.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 flex items-center gap-6">
+            <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Demandes</a>
+            <a href="{{ path('app_admin_clients') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Clients</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

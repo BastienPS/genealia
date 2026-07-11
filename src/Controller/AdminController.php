@@ -9,6 +9,7 @@ use App\Entity\ResearchRequest;
 use App\Entity\User;
 use App\Form\DocumentUploadType;
 use App\Form\MessageType;
+use App\Repository\AncestorRepository;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
@@ -44,6 +45,14 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/clients.html.twig', [
             'clients' => $userRepository->findClients(),
+        ]);
+    }
+
+    #[Route('/ancestors', name: 'app_admin_ancestors')]
+    public function listAncestors(AncestorRepository $ancestorRepository): Response
+    {
+        return $this->render('admin/ancestors.html.twig', [
+            'ancestors' => $ancestorRepository->findAllWithClientOrdered(),
         ]);
     }
 

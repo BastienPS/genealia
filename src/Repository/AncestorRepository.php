@@ -37,4 +37,22 @@ class AncestorRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['id' => $id, 'client' => $client]);
     }
+
+    /**
+     * Tous les ancêtres de tous les clients, triés par client puis par nom.
+     * Le client est hydraté en jointure (addSelect) pour éviter une requête
+     * N+1 lors du rendu de la liste d'administration. Base de la vue admin.
+     *
+     * @return Ancestor[]
+     */
+    public function findAllWithClientOrdered(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.client', 'c')->addSelect('c')
+            ->orderBy('c.email', 'ASC')
+            ->addOrderBy('a.lastName', 'ASC')
+            ->addOrderBy('a.firstName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
