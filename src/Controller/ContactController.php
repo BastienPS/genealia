@@ -53,9 +53,12 @@ class ContactController extends AbstractController
             return $this->redirectToRoute('app_contact');
         }
 
+        // 422 sur erreur de validation : Turbo Drive réaffiche alors le formulaire
+        // (avec les erreurs Symfony) au lieu de bloquer sur une réponse non-redirigée.
+        $status = $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
         return $this->render('contact/index.html.twig', [
             'contact_form' => $form->createView(),
-        ]);
+        ], new Response('', $status));
     }
 
     private function buildTextBody(string $name, string $email, string $message): string

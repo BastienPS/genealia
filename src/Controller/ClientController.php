@@ -165,9 +165,11 @@ class ClientController extends AbstractController
         }
 
         // Formulaire invalide (ex. vide) : on réaffiche la page avec le form lié.
+        // 422 (route POST-only) pour que Turbo Drive réaffiche le formulaire avec
+        // les erreurs Symfony au lieu de bloquer sur une réponse non-redirigée.
         $conversation = $conversationRepository->findOrCreateForClient($client);
 
-        return $this->renderMessagesPage($conversation, $messageRepository, $form);
+        return $this->renderMessagesPage($conversation, $messageRepository, $form, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -217,10 +219,13 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('app_client_ancestors');
         }
 
+        // 422 sur erreur de validation : Turbo Drive réaffiche alors le formulaire
+        // (avec les erreurs Symfony) au lieu de bloquer sur une réponse non-redirigée.
+        $status = $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
         return $this->render('client/ancestor_form.html.twig', [
             'form' => $form->createView(),
             'edit_mode' => false,
-        ]);
+        ], new Response('', $status));
     }
 
     /**
@@ -251,11 +256,14 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('app_client_ancestors');
         }
 
+        // 422 sur erreur de validation : Turbo Drive réaffiche alors le formulaire
+        // (avec les erreurs Symfony) au lieu de bloquer sur une réponse non-redirigée.
+        $status = $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
         return $this->render('client/ancestor_form.html.twig', [
             'form' => $form->createView(),
             'edit_mode' => true,
             'ancestor' => $ancestor,
-        ]);
+        ], new Response('', $status));
     }
 
     /**
@@ -290,13 +298,13 @@ class ClientController extends AbstractController
     /**
      * Construit la vue de la page messagerie côté client (fil + formulaire).
      */
-    private function renderMessagesPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form): Response
+    private function renderMessagesPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form, int $status = Response::HTTP_OK): Response
     {
         return $this->render('client/messages.html.twig', [
             'conversation' => $conversation,
             'messages' => $messageRepository->findThread($conversation),
             'form' => $form->createView(),
-        ]);
+        ], new Response('', $status));
     }
 
     /**

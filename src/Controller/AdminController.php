@@ -291,7 +291,9 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_message_show', ['id' => $conversation->getId()]);
         }
 
-        return $this->renderMessageShowPage($conversation, $messageRepository, $form);
+        // 422 (route POST-only) : Turbo Drive réaffiche le formulaire avec les
+        // erreurs Symfony au lieu de bloquer sur une réponse non-redirigée.
+        return $this->renderMessageShowPage($conversation, $messageRepository, $form, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -349,13 +351,13 @@ class AdminController extends AbstractController
     /**
      * Construit la vue de la page de conversation côté admin (fil + formulaire).
      */
-    private function renderMessageShowPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form): Response
+    private function renderMessageShowPage(Conversation $conversation, MessageRepository $messageRepository, FormInterface $form, int $status = Response::HTTP_OK): Response
     {
         return $this->render('admin/message_show.html.twig', [
             'conversation' => $conversation,
             'messages' => $messageRepository->findThread($conversation),
             'form' => $form->createView(),
-        ]);
+        ], new Response('', $status));
     }
 
     private function getUploadDir(int $requestId): string
