@@ -18,23 +18,64 @@ class ResearchRequestRepository extends ServiceEntityRepository
     }
 
     /**
-     * Demandes d'un client donné, triées de la plus récente à la plus ancienne.
-     * Sert de base à l'espace client — ne renvoie jamais les demandes d'autrui.
+     * Demandes actives (non archivées) d'un client donné, triées de la plus
+     * récente à la plus ancienne. Sert de base à l'espace client — ne renvoie
+     * jamais les demandes d'autrui ni les demandes archivées (du point de vue
+     * du client, une demande archivée est supprimée).
      *
      * @return ResearchRequest[]
      */
     public function findByClient(User $client): array
     {
-        return $this->findBy(['client' => $client], ['createdAt' => 'DESC']);
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client')
+            ->andWhere('r.status != :archived')
+            ->setParameter('client', $client)
+            ->setParameter('archived', 'archived')
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
-     * Récupère une demande précise appartenant au client, ou null si elle
-     * n'existe pas ou appartient à un autre compte. C'est la protection IDOR
-     * de la route de détail côté client.
+     * Récupère une demande active (non archivée) appartenant au client, ou
+     * null si elle n'existe pas, appartient à un autre compte, ou est archivée.
+     * C'est la protection IDOR des routes côté client (détail, confirmer/refuser
+     * la suppression) : une demande archivée renvoie null → 404.
      */
     public function findOneByClientAndId(User $client, int $id): ?ResearchRequest
     {
-        return $this->findOneBy(['id' => $id, 'client' => $client]);
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.id = :id')
+            ->andWhere('r.client = :client')
+            ->andWhere('r.status != :archived')
+            ->setParameter('id', $id)
+            ->setParameter('client', $client)
+            ->setParameter('archived', 'archived')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Listage côté admin : demandes actives par défaut, ou uniquement les
+     * archivées si $archived = true.
+     *
+     * @return ResearchRequest[]
+     */
+    public function findAllForAdmin(bool $archived = false): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->orderBy('r.createdAt', 'DESC');
+
+        if ($archived) {
+            $qb->andWhere('r.status = :archived')
+                ->setParameter('archived', 'archived');
+        } else {
+            $qb->andWhere('r.status != :archived')
+                ->setParameter('archived', 'archived');
+        }
+
+        return $qb->getQuery()
+            ->getResult();
     }
 }

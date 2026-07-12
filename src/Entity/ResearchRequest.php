@@ -53,7 +53,23 @@ class ResearchRequest
     private ?string $additionalInfo = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $status = 'pending'; // pending, in_progress, completed, cancelled
+    private ?string $status = 'pending'; // pending, in_progress, completed, cancelled, archived
+
+    /**
+     * Drapeau « l'admin a demandé la suppression, en attente de confirmation
+     * du client ». Transitoire : le status reste inchangé pendant la demande,
+     * le drapeau voyage à côté. Levé par l'admin, baissé si le client refuse
+     * ou si la demande est archivée (confirmée ou supprimée directement).
+     */
+    #[ORM\Column]
+    private bool $deletionRequested = false;
+
+    /**
+     * Statut avant archivage, mémorisé pour permettre une restauration fidèle
+     * par l'admin. Null tant que la demande n'est pas archivée.
+     */
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $previousStatus = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -219,6 +235,33 @@ class ResearchRequest
     public function setStatus(string $status): static
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->status === 'archived';
+    }
+
+    public function isDeletionRequested(): bool
+    {
+        return $this->deletionRequested;
+    }
+
+    public function setDeletionRequested(bool $deletionRequested): static
+    {
+        $this->deletionRequested = $deletionRequested;
+        return $this;
+    }
+
+    public function getPreviousStatus(): ?string
+    {
+        return $this->previousStatus;
+    }
+
+    public function setPreviousStatus(?string $previousStatus): static
+    {
+        $this->previousStatus = $previousStatus;
         return $this;
     }
 

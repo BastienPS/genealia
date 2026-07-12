@@ -102,6 +102,99 @@ class ClientController extends AbstractController
     }
 
     /**
+     * Suppression directe par le client de sa propre demande (soft : archivage).
+     * Autorisé à tout moment. IDOR via findOneByClientAndId (null → 404, y
+     * compris si déjà archivée). CSRF 'client-delete' ~ id. PRG → espace.
+     */
+    #[Route('/requests/{id}/supprimer', name: 'app_client_request_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function requestDelete(int $id, Request $request, ResearchRequestRepository $repository, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $researchRequest = $repository->findOneByClientAndId($client, $id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('client-delete' . $researchRequest->getId(), $token)) {
+            $researchRequest->setPreviousStatus($researchRequest->getStatus());
+            $researchRequest->setStatus('archived');
+            $researchRequest->setDeletionRequested(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Demande archivée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide, suppression annulée.');
+        }
+
+        return $this->redirectToRoute('app_client_space');
+    }
+
+    /**
+     * Le client confirme la suppression demandée par l'admin : archive la
+     * demande. IDOR + CSRF 'client-confirm-deletion' ~ id. PRG → espace.
+     */
+    #[Route('/requests/{id}/confirmer-suppression', name: 'app_client_request_confirm_deletion', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function requestConfirmDeletion(int $id, Request $request, ResearchRequestRepository $repository, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $researchRequest = $repository->findOneByClientAndId($client, $id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('client-confirm-deletion' . $researchRequest->getId(), $token)) {
+            $researchRequest->setPreviousStatus($researchRequest->getStatus());
+            $researchRequest->setStatus('archived');
+            $researchRequest->setDeletionRequested(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Demande supprimée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_client_space');
+    }
+
+    /**
+     * Le client refuse la suppression demandée par l'admin : baisse le
+     * drapeau, le statut reste inchangé. IDOR + CSRF 'client-refuse-deletion' ~ id.
+     * PRG → détail (la demande reste visible).
+     */
+    #[Route('/requests/{id}/refuser-suppression', name: 'app_client_request_refuse_deletion', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function requestRefuseDeletion(int $id, Request $request, ResearchRequestRepository $repository, EntityManagerInterface $entityManager): Response
+    {
+        $client = $this->getClientUser();
+        if ($client === null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $researchRequest = $repository->findOneByClientAndId($client, $id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('client-refuse-deletion' . $researchRequest->getId(), $token)) {
+            $researchRequest->setDeletionRequested(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Suppression refusée — votre demande est conservée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_client_request_show', ['id' => $researchRequest->getId()]);
+    }
+
+    /**
      * Messagerie : fil unique entre le descendant et l'admin. La conversation
      * est résolue depuis l'utilisateur connecté (aucun id dans l'URL) — un
      * client ne peut physiquement pas atteindre le fil d'un autre descendant.

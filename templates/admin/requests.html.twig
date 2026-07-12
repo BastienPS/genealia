@@ -17,6 +17,14 @@
             </div>
         </div>
 
+        <div class="flex justify-end mb-4">
+            {% if archived %}
+                <a href="{{ path('app_admin_requests') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">← Voir les demandes actives</a>
+            {% else %}
+                <a href="{{ path('app_admin_requests', {'archived': 1}) }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Voir les demandes archivées</a>
+            {% endif %}
+        </div>
+
         <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-brand-hairline text-brand-body">
@@ -42,12 +50,17 @@
                                 {{ request.createdAt|date('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4">
+                                {% if request.deletionRequested %}
+                                    <span class="block mb-1 px-2 py-1 rounded-2xl bg-brand-magenta/20 text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Suppression demandée</span>
+                                {% endif %}
                                 {% if request.status == 'pending' %}
                                     <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En attente</span>
                                 {% elseif request.status == 'in_progress' %}
                                     <span class="px-2 py-1 rounded-2xl bg-brand-orange/25 text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">En cours</span>
                                 {% elseif request.status == 'completed' %}
                                     <span class="px-2 py-1 rounded-2xl bg-brand-periwinkle/35 text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">Terminé</span>
+                                {% elseif request.status == 'archived' %}
+                                    <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">Archivée</span>
                                 {% else %}
                                     <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">{{ request.status }}</span>
                                 {% endif %}

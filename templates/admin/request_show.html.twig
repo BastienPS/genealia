@@ -20,7 +20,12 @@
                     <span class="text-brand-body text-sm hidden sm:inline">Connecté en tant que <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
                 {% endif %}
                 <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-ink text-[11px] font-mono uppercase tracking-mono-wide">
-                    {{ request.status }}
+                    {% if request.status == 'pending' %}En attente
+                    {% elseif request.status == 'in_progress' %}En cours
+                    {% elseif request.status == 'completed' %}Terminé
+                    {% elseif request.status == 'cancelled' %}Annulé
+                    {% elseif request.status == 'archived' %}Archivée
+                    {% else %}{{ request.status }}{% endif %}
                 </span>
                 <a href="{{ path('app_logout') }}" class="text-brand-body hover:text-brand-primary transition duration-300 text-sm">Déconnexion</a>
             </div>
@@ -146,6 +151,7 @@
                     </div>
                 </div>
 
+                {% if not request.isArchived %}
                 <div class="bg-brand-canvas p-6 rounded-2xl shadow-none border border-brand-hairline">
                     <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Gérer le Statut</h3>
                     <form action="{{ path('app_admin_request_update_status', {'id': request.id}) }}" method="POST" class="space-y-3">
@@ -159,6 +165,38 @@
                             Mettre à jour
                         </button>
                     </form>
+                </div>
+                {% endif %}
+
+                <div class="bg-brand-canvas p-6 rounded-2xl shadow-none border border-brand-hairline">
+                    <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Suppression de la demande</h3>
+                    {% if request.isArchived %}
+                        <p class="text-brand-body text-sm mb-4">Cette demande est archivée (supprimée). Statut précédent : {{ request.previousStatus ?? 'pending' }}.</p>
+                        <form action="{{ path('app_admin_request_restore', {'id': request.id}) }}" method="POST" onsubmit="return confirm('Restaurer cette demande ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin-restore' ~ request.id) }}">
+                            <button type="submit" class="w-full btn-dark">Restaurer</button>
+                        </form>
+                    {% elseif request.deletionRequested %}
+                        <p class="text-brand-body text-sm mb-4">Suppression demandée au client — en attente de confirmation.</p>
+                        <form action="{{ path('app_admin_request_cancel_deletion', {'id': request.id}) }}" method="POST" onsubmit="return confirm('Annuler la demande de suppression ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin-cancel-deletion' ~ request.id) }}">
+                            <button type="submit" class="w-full btn-outline">Annuler la demande</button>
+                        </form>
+                    {% else %}
+                        {% if request.client %}
+                            <p class="text-brand-body text-sm mb-4">La demande sera marquée « à supprimer » — le client devra confirmer dans son espace.</p>
+                            <form action="{{ path('app_admin_request_request_deletion', {'id': request.id}) }}" method="POST" onsubmit="return confirm('Demander la suppression au client ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin-request-deletion' ~ request.id) }}">
+                                <button type="submit" class="w-full btn-dark">Demander la suppression</button>
+                            </form>
+                        {% else %}
+                            <p class="text-brand-body text-sm mb-4">Demande sans client rattaché — archivage direct (aucune confirmation possible).</p>
+                            <form action="{{ path('app_admin_request_archive', {'id': request.id}) }}" method="POST" onsubmit="return confirm('Archiver cette demande ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin-archive' ~ request.id) }}">
+                                <button type="submit" class="w-full btn-dark">Archiver</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>

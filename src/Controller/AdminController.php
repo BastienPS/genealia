@@ -32,12 +32,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class AdminController extends AbstractController
 {
     #[Route('/requests', name: 'app_admin_requests')]
-    public function listRequests(EntityManagerInterface $entityManager): Response
+    public function listRequests(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $archived = $request->query->getBoolean('archived');
         $repository = $entityManager->getRepository(ResearchRequest::class);
 
         return $this->render('admin/requests.html.twig', [
-            'requests' => $repository->findBy([], ['createdAt' => 'DESC']),
+            'requests' => $repository->findAllForAdmin($archived),
+            'archived' => $archived,
         ]);
     }
 
@@ -87,6 +89,108 @@ class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_requests');
+    }
+
+    /**
+     * L'admin demande la suppression d'une demande client-linked : lève le
+     * drapeau deletion_requested (le statut reste inchangé), le client verra
+     * une bannière dans son espace et confirmera/refusera. CSRF 'admin-request-deletion' ~ id. PRG → show.
+     */
+    #[Route('/requests/{id}/demander-suppression', name: 'app_admin_request_request_deletion', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function requestDeletion(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $researchRequest = $entityManager->getRepository(ResearchRequest::class)->find($id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('admin-request-deletion' . $researchRequest->getId(), $token)) {
+            $researchRequest->setDeletionRequested(true);
+            $entityManager->flush();
+            $this->addFlash('success', 'Suppression demandée au client. En attente de confirmation.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_admin_request_show', ['id' => $researchRequest->getId()]);
+    }
+
+    /**
+     * L'admin annule sa demande de suppression avant action du client :
+     * baisse le drapeau. CSRF 'admin-cancel-deletion' ~ id. PRG → show.
+     */
+    #[Route('/requests/{id}/annuler-demande-suppression', name: 'app_admin_request_cancel_deletion', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function cancelDeletion(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $researchRequest = $entityManager->getRepository(ResearchRequest::class)->find($id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('admin-cancel-deletion' . $researchRequest->getId(), $token)) {
+            $researchRequest->setDeletionRequested(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Demande de suppression annulée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_admin_request_show', ['id' => $researchRequest->getId()]);
+    }
+
+    /**
+     * Archivage direct par l'admin (soft) — principalement pour les demandes
+     * orphelines (client = null, personne à qui demander confirmation).
+     * Mémorise le statut courant dans previousStatus pour restauration.
+     * CSRF 'admin-archive' ~ id. PRG → show.
+     */
+    #[Route('/requests/{id}/archiver', name: 'app_admin_request_archive', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function archive(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $researchRequest = $entityManager->getRepository(ResearchRequest::class)->find($id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('admin-archive' . $researchRequest->getId(), $token)) {
+            $researchRequest->setPreviousStatus($researchRequest->getStatus());
+            $researchRequest->setStatus('archived');
+            $researchRequest->setDeletionRequested(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Demande archivée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_admin_request_show', ['id' => $researchRequest->getId()]);
+    }
+
+    /**
+     * Restaure une demande archivée : remet le statut mémorisé (ou 'pending'
+     * par défaut) et vide previousStatus. CSRF 'admin-restore' ~ id. PRG → show.
+     */
+    #[Route('/requests/{id}/restaurer', name: 'app_admin_request_restore', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function restore(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $researchRequest = $entityManager->getRepository(ResearchRequest::class)->find($id);
+        if ($researchRequest === null) {
+            throw $this->createNotFoundException('Demande non trouvée');
+        }
+
+        $token = (string) $request->request->get('_token');
+        if ($this->isCsrfTokenValid('admin-restore' . $researchRequest->getId(), $token)) {
+            $researchRequest->setStatus($researchRequest->getPreviousStatus() ?? 'pending');
+            $researchRequest->setPreviousStatus(null);
+            $entityManager->flush();
+            $this->addFlash('success', 'Demande restaurée.');
+        } else {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+        }
+
+        return $this->redirectToRoute('app_admin_request_show', ['id' => $researchRequest->getId()]);
     }
 
     #[Route('/requests/{id}', name: 'app_admin_request_show')]
