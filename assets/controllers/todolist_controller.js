@@ -67,18 +67,29 @@ export default class extends Controller {
             const done = data.done === true;
             const label = row.querySelector('.js-task-label');
             const btn = row.querySelector('.js-toggle-btn');
+            const svg = btn ? btn.querySelector('svg') : null;
             if (done) {
                 label.classList.add('line-through', 'text-brand-body');
                 row.classList.add('opacity-60');
-                btn.textContent = 'Annuler';
                 btn.classList.add('text-brand-mint');
                 btn.classList.remove('text-brand-ink');
+                if (svg) {
+                    svg.setAttribute('fill', 'currentColor');
+                    svg.setAttribute('stroke', 'none');
+                    svg.removeAttribute('stroke-width');
+                }
+                btn.title = 'Annuler (tâche faite)';
             } else {
                 label.classList.remove('line-through', 'text-brand-body');
                 row.classList.remove('opacity-60');
-                btn.textContent = 'Fait';
                 btn.classList.remove('text-brand-mint');
                 btn.classList.add('text-brand-ink');
+                if (svg) {
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    svg.setAttribute('stroke-width', '3');
+                }
+                btn.title = 'Marquer comme fait';
             }
         } catch (e) {
             console.error(e);
