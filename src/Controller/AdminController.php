@@ -6,6 +6,7 @@ use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\ResearchDocument;
 use App\Entity\ResearchRequest;
+use App\Entity\TodoList;
 use App\Entity\User;
 use App\Form\DocumentUploadType;
 use App\Form\MessageType;
@@ -99,9 +100,13 @@ class AdminController extends AbstractController
 
         $uploadForm = $this->createForm(DocumentUploadType::class);
 
+        // Todolists-modèles disponibles pour application (sidebar « Todolist »).
+        $todoLists = $entityManager->getRepository(TodoList::class)->findBy([], ['createdAt' => 'DESC']);
+
         return $this->render('admin/request_show.html.twig', [
             'request' => $researchRequest,
             'uploadForm' => $uploadForm->createView(),
+            'todo_lists' => $todoLists,
         ]);
     }
 

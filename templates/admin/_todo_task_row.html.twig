@@ -1,12 +1,18 @@
 {# Ligne d'une tâche — rendu initial ET fragment retourné par app_admin_todotask_new (AJAX).
-   Le contrôleur Stimulus `todolist` lit les data-* pour toggle/delete, et gère le drag. #}
+   Le contrôleur Stimulus `todolist` lit les data-* pour toggle/delete, et gère le drag.
+   Routes/CSRF paramétrables : defaults = configurateur (phase 1) ; la fiche demande
+   (phase 2) passe des overrides pour cibler les routes snapshot request_todo. #}
+{% set toggle_route = toggle_route|default('app_admin_todotask_toggle') %}
+{% set delete_route = delete_route|default('app_admin_todotask_delete') %}
+{% set toggle_csrf_prefix = toggle_csrf_prefix|default('toggle') %}
+{% set delete_csrf_prefix = delete_csrf_prefix|default('delete') %}
 <tr class="hover:bg-stone-50 transition duration-150 {% if task.done %}opacity-60{% endif %}"
     data-todolist-target="task"
     data-id="{{ task.id }}"
-    data-toggle-url="{{ path('app_admin_todotask_toggle', {'id': task.id}) }}"
-    data-delete-url="{{ path('app_admin_todotask_delete', {'id': task.id}) }}"
-    data-toggle-csrf="{{ csrf_token('toggle' ~ task.id) }}"
-    data-delete-csrf="{{ csrf_token('delete' ~ task.id) }}"
+    data-toggle-url="{{ path(toggle_route, {'id': task.id}) }}"
+    data-delete-url="{{ path(delete_route, {'id': task.id}) }}"
+    data-toggle-csrf="{{ csrf_token(toggle_csrf_prefix ~ task.id) }}"
+    data-delete-csrf="{{ csrf_token(delete_csrf_prefix ~ task.id) }}"
     draggable="true"
     data-action="dragstart->todolist#dragstart dragover->todolist#dragover drop->todolist#drop dragend->todolist#dragend">
     <td class="px-3 py-4 text-center cursor-grab select-none text-brand-body" title="Glisser pour réordonner">⋮</td>

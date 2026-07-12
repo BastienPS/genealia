@@ -65,6 +65,9 @@ class ResearchRequest
     #[ORM\OneToMany(mappedBy: 'researchRequest', targetEntity: ResearchDocument::class, orphanRemoval: true)]
     private Collection $documents;
 
+    #[ORM\OneToOne(mappedBy: 'request', cascade: ['persist', 'remove'])]
+    private ?RequestTodoList $requestTodoList = null;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -266,6 +269,23 @@ class ResearchRequest
                 $document->setResearchRequest(null);
             }
         }
+        return $this;
+    }
+
+    public function getRequestTodoList(): ?RequestTodoList
+    {
+        return $this->requestTodoList;
+    }
+
+    public function setRequestTodoList(?RequestTodoList $requestTodoList): static
+    {
+        // unset the owning side unless already updated
+        if ($requestTodoList === null && $this->requestTodoList !== null) {
+            $this->requestTodoList->setRequest(null);
+        }
+
+        $this->requestTodoList = $requestTodoList;
+
         return $this;
     }
 }
