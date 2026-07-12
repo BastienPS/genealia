@@ -22,7 +22,7 @@
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body class="bg-brand-canvas text-brand-ink font-sans antialiased">
+    <body class="bg-brand-canvas text-brand-ink font-sans antialiased" data-turbo-prefetch="false">
         <header class="sticky top-0 z-50 bg-brand-canvas-dark text-brand-on-dark border-b border-brand-surface-dark-soft">
             <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                 <a href="{{ path('app_home') }}" class="flex items-center gap-2 hover:opacity-80 transition duration-300">
@@ -36,17 +36,29 @@
                 </div>
                 <div class="flex items-center gap-4">
                     {% if app.user %}
-                        <span class="text-brand-on-dark text-sm hidden sm:inline">Bonjour {{ app.user.userIdentifier }}</span>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_admin_clients') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Clients</a>
-                            <a href="{{ path('app_admin_todolists') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Todolist</a>
-                            <a href="{{ path('app_admin_messages') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Messagerie</a>
-                        {% else %}
-                            <a href="{{ path('app_client_space') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Mon espace</a>
-                            <a href="{{ path('app_client_ancestors') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Mes ancêtres</a>
-                            <a href="{{ path('app_client_messages') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Messagerie</a>
-                        {% endif %}
-                        <a href="{{ path('app_logout') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">Déconnexion</a>
+                        <div class="relative" data-controller="dropdown">
+                            <button type="button" data-action="click->dropdown#toggle" class="flex items-center gap-1.5 text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm">
+                                <span>Bonjour</span>
+                                <span class="hidden sm:inline">{{ is_granted('ROLE_ADMIN') ? app.user.userIdentifier : app.user.firstName }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div data-dropdown-target="menu" class="hidden absolute right-0 top-full mt-2 w-60 rounded-2xl border border-brand-surface-dark-soft bg-brand-canvas-dark text-brand-on-dark shadow-lg overflow-hidden z-50">
+                                <div class="px-4 py-3 text-xs text-brand-on-dark/70 border-b border-brand-surface-dark-soft truncate">Connecté en tant que {{ app.user.userIdentifier }}</div>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('app_admin_requests') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Demandes</a>
+                                    <a href="{{ path('app_admin_clients') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Clients</a>
+                                    <a href="{{ path('app_admin_todolists') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Todolist</a>
+                                    <a href="{{ path('app_admin_messages') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Messagerie</a>
+                                {% else %}
+                                    <a href="{{ path('app_client_space') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Mon espace</a>
+                                    <a href="{{ path('app_client_ancestors') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Mes ancêtres</a>
+                                    <a href="{{ path('app_client_messages') }}" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Messagerie</a>
+                                {% endif %}
+                                <div class="border-t border-brand-surface-dark-soft">
+                                    <a href="{{ path('app_logout') }}" data-turbo="false" class="block px-4 py-2.5 text-sm hover:bg-brand-surface-dark-soft transition duration-150">Déconnexion</a>
+                                </div>
+                            </div>
+                        </div>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="text-brand-on-dark hover:opacity-80 font-medium transition duration-300 text-sm hidden sm:inline">Connexion</a>
                     {% endif %}

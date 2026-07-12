@@ -63,6 +63,25 @@ class User implements UserInterface
         return $this->displayName;
     }
 
+    /**
+     * Prénom affiché dans le header et le tableau de bord client : premier
+     * mot du displayName OAuth (Google/Facebook renvoient le nom complet),
+     * fallback sur l'e-mail si le displayName est vide. L'admin (utilisateur
+     * en mémoire) n'est pas un App\Entity\User et n'appelle jamais cette
+     * méthode — il affiche son userIdentifier ("admin") directement.
+     */
+    public function getFirstName(): string
+    {
+        $name = trim((string) $this->displayName);
+        if ($name === '') {
+            return (string) $this->email;
+        }
+
+        $parts = explode(' ', $name);
+
+        return $parts[0] !== '' ? $parts[0] : $name;
+    }
+
     public function setDisplayName(string $displayName): static
     {
         $this->displayName = $displayName;

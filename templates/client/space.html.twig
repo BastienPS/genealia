@@ -12,7 +12,7 @@
             </div>
             <div class="flex items-center gap-6">
                 {% if app.user %}
-                    <span class="text-brand-body text-sm hidden sm:inline">Bonjour <span class="font-medium text-brand-ink">{{ app.user.userIdentifier }}</span></span>
+                    <span class="text-brand-body text-sm hidden sm:inline">Bonjour <span class="font-medium text-brand-ink">{{ app.user.firstName }}</span></span>
                 {% endif %}
                 <a href="{{ path('app_client_messages') }}" class="inline-flex items-center gap-2 font-mono uppercase text-[11px] tracking-mono-wide font-medium px-4 py-2 rounded-2xl text-brand-ink border border-brand-hairline bg-brand-canvas transition duration-300 hover:border-brand-ink">
                     Messagerie
@@ -100,6 +100,39 @@
                 </tbody>
             </table>
         </div>
+
+        {% if archived_requests|length > 0 %}
+            <div class="mt-10">
+                <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Archivées ({{ archived_requests|length }})</h2>
+                <div class="bg-brand-canvas shadow-none rounded-2xl overflow-hidden border border-brand-hairline">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-brand-hairline text-brand-body">
+                            <tr class="border-b border-brand-hairline">
+                                <th class="eyebrow px-6 py-4">Ancêtre</th>
+                                <th class="eyebrow px-6 py-4">Date</th>
+                                <th class="eyebrow px-6 py-4">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-brand-hairline">
+                            {% for request in archived_requests %}
+                                <tr class="opacity-60">
+                                    <td class="px-6 py-4">
+                                        <div class="text-brand-ink">{{ request.ancestorFirstName }} {{ request.ancestorLastName }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-brand-body text-xs">
+                                        {{ request.createdAt|date('d/m/Y') }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 rounded-2xl bg-brand-hairline text-brand-body text-[11px] font-mono uppercase tracking-mono-wide">Archivée</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-2 text-[11px] text-brand-body">Les demandes archivées sont conservées en lecture seule. Pour en restaurer une, contactez le généalogiste.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

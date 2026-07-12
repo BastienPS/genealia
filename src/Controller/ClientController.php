@@ -42,6 +42,7 @@ class ClientController extends AbstractController
 
         return $this->render('client/space.html.twig', [
             'requests' => $repository->findByClient($client),
+            'archived_requests' => $repository->findArchivedByClient($client),
             'messageUnreadCount' => $messageRepository->findUnreadCountForClient($client),
         ]);
     }

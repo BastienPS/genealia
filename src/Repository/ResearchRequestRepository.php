@@ -57,6 +57,25 @@ class ResearchRequestRepository extends ServiceEntityRepository
     }
 
     /**
+     * Demandes archivées d'un client (supprimées de son point de vue mais
+     * conservées en base), affichées dans une section à part sur le tableau
+     * de bord. Triées de la plus récente à la plus ancienne.
+     *
+     * @return ResearchRequest[]
+     */
+    public function findArchivedByClient(User $client): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.client = :client')
+            ->andWhere('r.status = :archived')
+            ->setParameter('client', $client)
+            ->setParameter('archived', 'archived')
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Listage côté admin : demandes actives par défaut, ou uniquement les
      * archivées si $archived = true.
      *
