@@ -160,72 +160,74 @@
                         </button>
                     </form>
                 </div>
+            </div>
+        </div>
 
-                <div class="bg-brand-canvas p-6 rounded-2xl shadow-none border border-brand-hairline">
-                    <h3 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-4">Todolist</h3>
+        <!-- Todolist (pleine largeur) -->
+        <div class="mt-8 bg-brand-canvas p-8 rounded-2xl shadow-none border border-brand-hairline">
+            <h2 class="text-xs font-mono uppercase tracking-mono-wide text-brand-body mb-6 border-b border-brand-hairline pb-4">Todolist</h2>
 
-                    {% set rtl = request.requestTodoList %}
-                    {% if rtl %}
-                        <div class="text-brand-ink font-medium text-sm mb-3">{{ rtl.name }}</div>
-
-                        <div data-controller="todolist"
-                             data-todolist-reorder-url-value="{{ path('app_admin_request_todo_reorder', {'id': rtl.id}) }}"
-                             data-todolist-reorder-csrf-value="{{ csrf_token('rt-reorder' ~ rtl.id) }}">
-                            <div class="rounded-2xl border border-brand-hairline overflow-hidden">
-                                <table class="w-full text-left border-collapse">
-                                    <thead class="bg-brand-hairline text-brand-body">
-                                        <tr class="border-b border-brand-hairline">
-                                            <th class="eyebrow px-3 py-3 text-center w-10">⋮</th>
-                                            <th class="eyebrow px-3 py-3">Tâche</th>
-                                            <th class="eyebrow px-3 py-3 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-brand-hairline" data-todolist-target="list">
-                                        {% for task in rtl.tasks %}
-                                            {{ include('admin/_todo_task_row.html.twig', {
-                                                task: task,
-                                                toggle_route: 'app_admin_request_todotask_toggle',
-                                                delete_route: 'app_admin_request_todotask_delete',
-                                                toggle_csrf_prefix: 'rt-toggle',
-                                                delete_csrf_prefix: 'rt-delete',
-                                            }) }}
-                                        {% else %}
-                                            <tr data-todolist-target="empty" class="bg-brand-canvas">
-                                                <td colspan="3" class="px-3 py-8 text-center text-brand-body italic text-sm">
-                                                    Aucune tâche dans cette todolist.
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p class="mt-2 text-[11px] text-brand-body">Glissez une tâche par la poignée ⋮ pour réordonner.</p>
-                        </div>
-
-                        <form action="{{ path('app_admin_request_todo_clear', {'requestId': request.id}) }}" method="POST" onsubmit="return confirm('Retirer la todolist de cette demande ?');" class="mt-3">
-                            <input type="hidden" name="_token" value="{{ csrf_token('rt-clear' ~ request.id) }}">
-                            <button type="submit" class="btn-outline w-full">Retirer</button>
-                        </form>
-                    {% else %}
-                        <p class="text-brand-body text-sm italic mb-3">Aucune todolist appliquée à cette demande.</p>
-                    {% endif %}
-
-                    <form action="{{ path('app_admin_request_todo_apply', {'requestId': request.id}) }}" method="POST" class="space-y-3 mt-4">
-                        <input type="hidden" name="_token" value="{{ csrf_token('rt-apply' ~ request.id) }}">
-                        <select name="todoListId" required class="w-full p-2 rounded-2xl border border-brand-hairline text-sm bg-brand-canvas text-brand-ink">
-                            <option value="" disabled selected>— Choisir une todolist —</option>
-                            {% for list in todo_lists %}
-                                <option value="{{ list.id }}">{{ list.name }}</option>
-                            {% else %}
-                                <option value="" disabled>Aucune todolist configurée</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" class="w-full btn-dark" {% if todo_lists is empty %}disabled{% endif %}>
-                            {{ rtl ? 'Remplacer' : 'Appliquer' }}
-                        </button>
+            {% set rtl = request.requestTodoList %}
+            {% if rtl %}
+                <div class="flex items-center justify-between gap-4 mb-4">
+                    <div class="text-brand-ink font-medium">{{ rtl.name }}</div>
+                    <form action="{{ path('app_admin_request_todo_clear', {'requestId': request.id}) }}" method="POST" onsubmit="return confirm('Retirer la todolist de cette demande ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('rt-clear' ~ request.id) }}">
+                        <button type="submit" class="btn-outline">Retirer</button>
                     </form>
                 </div>
-            </div>
+
+                <div data-controller="todolist"
+                     data-todolist-reorder-url-value="{{ path('app_admin_request_todo_reorder', {'id': rtl.id}) }}"
+                     data-todolist-reorder-csrf-value="{{ csrf_token('rt-reorder' ~ rtl.id) }}">
+                    <div class="rounded-2xl border border-brand-hairline overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-brand-hairline text-brand-body">
+                                <tr class="border-b border-brand-hairline">
+                                    <th class="eyebrow px-3 py-3 text-center w-10">⋮</th>
+                                    <th class="eyebrow px-6 py-3">Tâche</th>
+                                    <th class="eyebrow px-6 py-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-hairline" data-todolist-target="list">
+                                {% for task in rtl.tasks %}
+                                    {{ include('admin/_todo_task_row.html.twig', {
+                                        task: task,
+                                        toggle_route: 'app_admin_request_todotask_toggle',
+                                        delete_route: 'app_admin_request_todotask_delete',
+                                        toggle_csrf_prefix: 'rt-toggle',
+                                        delete_csrf_prefix: 'rt-delete',
+                                    }) }}
+                                {% else %}
+                                    <tr data-todolist-target="empty" class="bg-brand-canvas">
+                                        <td colspan="3" class="px-6 py-10 text-center text-brand-body italic text-sm">
+                                            Aucune tâche dans cette todolist.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-2 text-[11px] text-brand-body">Astuce : glissez une tâche par la poignée ⋮ pour la réordonner.</p>
+                </div>
+            {% else %}
+                <p class="text-brand-body text-sm italic mb-4">Aucune todolist appliquée à cette demande.</p>
+            {% endif %}
+
+            <form action="{{ path('app_admin_request_todo_apply', {'requestId': request.id}) }}" method="POST" class="flex flex-col sm:flex-row sm:items-center gap-3 mt-6">
+                <input type="hidden" name="_token" value="{{ csrf_token('rt-apply' ~ request.id) }}">
+                <select name="todoListId" required class="flex-1 sm:max-w-md p-2 rounded-2xl border border-brand-hairline text-sm bg-brand-canvas text-brand-ink">
+                    <option value="" disabled selected>— Choisir une todolist —</option>
+                    {% for list in todo_lists %}
+                        <option value="{{ list.id }}">{{ list.name }}</option>
+                    {% else %}
+                        <option value="" disabled>Aucune todolist configurée</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-dark" {% if todo_lists is empty %}disabled{% endif %}>
+                    {{ rtl ? 'Remplacer' : 'Appliquer' }}
+                </button>
+            </form>
         </div>
     </div>
 </div>
