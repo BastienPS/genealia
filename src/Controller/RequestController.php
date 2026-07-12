@@ -43,12 +43,23 @@ class RequestController extends AbstractController
             $this->handleClientDocuments($form->get('documents')->getData(), $researchRequest, $entityManager);
             $entityManager->flush();
 
-            return $this->render('request/success.html.twig');
+            // PRG : redirige (302) après création. Rendu direct (200) = rejeté par
+            // Turbo Drive (« Form responses must redirect ») + resoumission sur refresh.
+            return $this->redirectToRoute('app_request_success');
         }
 
+        // 422 sur erreur de validation : Turbo Drive réaffiche alors le formulaire
+        // (avec les erreurs Symfony) au lieu de bloquer sur une réponse non-redirigée.
+        $status = $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
         return $this->render('request/new.html.twig', [
             'requestForm' => $form->createView(),
-        ]);
+        ], new Response('', $status));
+    }
+
+    #[Route('/success', name: 'app_request_success')]
+    public function success(): Response
+    {
+        return $this->render('request/success.html.twig');
     }
 
     /**
