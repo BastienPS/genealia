@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /login
+Disallow: /request/new
+Disallow: /request/success
+Disallow: /espace
+Disallow: /admin
+Allow: /
+
+Sitemap: https://genealia.fr/sitemap.xml

@@ -2,6 +2,36 @@
 
 {% block title %}Généalia - Votre expert en recherches généalogiques{% endblock %}
 
+{% block meta_description %}Généalogiste indépendant : retrouvez vos ancêtres en France. Recherches gratuites en archives, registres paroissiaux et état civil. Accompagnement humain et méthodique.{% endblock %}
+
+{% block og_title %}Généalia — Retrouvez vos ancêtres, généalogie après généalogie{% endblock %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Généalia",
+  "serviceType": "Recherches généalogiques",
+  "description": "Recherches généalogiques gratuites en France : archives départementales, registres paroissiaux et état civil.",
+  "areaServed": { "@type": "Country", "name": "France" },
+  "url": "{{ absolute_url(path('app_home')) }}",
+  "provider": {
+    "@type": "Person",
+    "name": "Audrey",
+    "url": "{{ absolute_url(path('app_legal_apropos')) }}"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Recherches généalogiques gratuites"
+  },
+  "sameAs": ["https://www.paypal.me/bastienPS"]
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="flex flex-col">
     <!-- Hero -->
@@ -131,6 +161,22 @@
                 <div class="mt-10">
                     <a href="{{ path('app_request_new') }}" class="btn-cta">Déposer une demande</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-24 px-6 bg-brand-canvas">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="eyebrow">FAQ</span>
+            <h2 class="mt-4 text-3xl md:text-[40px] font-medium tracking-tight text-brand-ink">Questions fréquentes</h2>
+            <div class="rule-gradient mt-6"></div>
+            <p class="mt-6 text-brand-body leading-relaxed max-w-2xl mx-auto">
+                Comment retrouver ses ancêtres, quelles archives consulter, combien de temps prend une recherche…
+                Retrouvez les réponses aux questions les plus courantes.
+            </p>
+            <div class="mt-10">
+                <a href="{{ path('app_legal_faq') }}" class="btn-outline">Consulter la FAQ</a>
             </div>
         </div>
     </section>

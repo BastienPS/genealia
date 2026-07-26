@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ edit_mode ? 'Modifier un ancêtre' : 'Ajouter un ancêtre' }} - Généalia{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
 
 {% block body %}
 <div class="bg-brand-canvas py-12 px-6 min-h-screen">

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ — Recherches généalogiques gratuites - Généalia{% endblock %}
+
+{% block meta_description %}Questions fréquentes sur la généalogie : comment retrouver ses ancêtres en France, quelles archives consulter, coût et durée d'une recherche, documents à fournir.{% endblock %}
+
+{% block og_title %}FAQ — Retrouver ses ancêtres{% endblock %}
+
+{# Liste unique des Q/R, partagée entre le HTML affiché et le JSON-LD FAQPage
+   (les textes doivent être strictement identiques pour les rich results Google). #}
+{% set faqs = [
+    {
+        q: 'Comment retrouver ses ancêtres en France ?',
+        a: 'Pour retrouver vos ancêtres en France, on remonte génération par génération à partir de vous-même, en utilisant les actes d\'état civil (naissances, mariages, décès) puis, avant 1792, les registres paroissiaux tenus par les curés. Les archives départementales mettent en ligne une grande partie de ces registres. Une recherche méthodique part d\'un fait connu et remonte le temps en croisant les sources.'
+    },
+    {
+        q: 'Quelles archives consulter pour une recherche généalogique ?',
+        a: 'Les sources principales sont les archives départementales (état civil et registres paroissiaux numérisés), les tables décennales, les recensements de population, les registres matricules militaires et, pour certaines périodes, les notaires ou les archives communales. Le choix dépend de l\'époque recherchée et de la zone géographique.'
+    },
+    {
+        q: 'Combien coûte une recherche généalogique ?',
+        a: 'Chez Généalia, les recherches sont entièrement gratuites. Il s\'agit d\'une activité bénévole : vous ne payez pas pour la recherche elle-même. Un don optionnel via PayPal est possible si vous le souhaitez, mais n\'est jamais requis.'
+    },
+    {
+        q: 'Combien de temps prend une recherche ?',
+        a: 'La durée varie selon la profondeur recherchée, la qualité des indices de départ et la disponibilité des archives. Une branche peut se tracer en quelques jours quand les sources sont accessibles en ligne ; une recherche plus ancienne ou sur des archives incomplètes prend plusieurs semaines. Vous êtes tenu informé de l\'avancement via votre espace et la messagerie.'
+    },
+    {
+        q: 'Quels documents dois-je fournir pour démarrer ?',
+        a: 'Le plus utile est de partir d\'un fait précis et prouvé : date et lieu de naissance, de mariage ou de décès d\'un ancêtre connu, idéalement accompagné d\'un acte. Plus vous donnez d\'indices exacts (noms, dates, lieux, professions), plus la recherche est fiable. Les copies d\'actes d\'état civil que vous possédez déjà accélèrent fortement le démarrage.'
+    },
+    {
+        q: 'Qu\'est-ce qu\'un registre paroissial ?',
+        a: 'Un registre paroissial est le livre tenu par le curé d\'une paroisse avant 1792, qui enregistrait les baptêmes, mariages et sépultures. C\'est la source principale pour remonter au-delà de la création de l\'état civil. À partir de 1792, ces registres sont remplacés par les registres d\'état civil tenus par les mairies.'
+    },
+    {
+        q: 'Puis-je rechercher mes ancêtres moi-même ?',
+        a: 'Oui, les archives départementales sont accessibles à tous, souvent en ligne et gratuitement. Mais cela demande du temps, de la méthode et de connaître les sources. Si vous manquez de temps, ne savez pas par où commencer, ou êtes bloqué sur une branche, c\'est là qu\'un généalogiste peut prendre le relais.'
+    }
+] %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in faqs %}
+    {
+      "@type": "Question",
+      "name": {{ faq.q|json_encode|raw }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ faq.a|json_encode|raw }}
+      }
+    }{{ not loop.last ? ',' : '' }}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block body %}
+<section class="bg-brand-canvas px-6 py-24">
+    <div class="max-w-4xl mx-auto">
+        <span class="eyebrow">FAQ</span>
+        <h1 class="mt-4 text-3xl md:text-[40px] font-medium tracking-tight text-brand-ink">Questions fréquentes</h1>
+        <div class="rule-gradient mt-6"></div>
+        <p class="mt-6 text-brand-body leading-relaxed max-w-2xl">
+            Tout ce qu'il faut savoir pour démarrer une recherche généalogique avec Généalia :
+            méthodes, sources d'archives, durée et conditions. Une autre question&nbsp;?
+            <a href="{{ path('app_contact') }}" class="text-brand-ink underline underline-offset-4 hover:text-brand-primary transition">Écrivez-moi</a>.
+        </p>
+
+        <div class="prose-legal mt-12 space-y-8 text-brand-body leading-relaxed">
+            {% for faq in faqs %}
+            <div>
+                <h2 class="text-xl font-medium text-brand-ink mb-3">{{ faq.q }}</h2>
+                <p>{{ faq.a }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-16 rounded-2xl border border-brand-hairline bg-brand-canvas-dark p-8 text-center">
+            <p class="text-brand-ink font-medium">Prêt à retrouver vos ancêtres&nbsp;?</p>
+            <p class="mt-2 text-brand-body">Les recherches sont gratuites. Déposez votre demande en quelques minutes.</p>
+            <a href="{{ path('app_request_new') }}" class="btn-cta mt-6 inline-flex">Déposer une demande</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -25,4 +25,10 @@ class LegalController extends AbstractController
     {
         return $this->render('legal/a-propos.html.twig');
     }
+
+    #[Route('/faq', name: 'app_legal_faq')]
+    public function faq(): Response
+    {
+        return $this->render('legal/faq.html.twig');
+    }
 }
